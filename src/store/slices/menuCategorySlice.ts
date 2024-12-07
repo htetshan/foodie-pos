@@ -28,9 +28,7 @@ export const createMenuCategory = createAsyncThunk(
     const dataFromServer = await response.json();
 
     const { menuCategory } = dataFromServer;
-
-    onSuccess && onSuccess();
-    return menuCategory;
+    thunkApi.dispatch(addMenuCategory(menuCategory));
   }
 );
 

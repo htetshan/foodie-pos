@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import menuSliceReducer from "./slices/menuSlice";
 import appSnackbarReducer from "./slices/appSnackbarSlice";
+import menuCategoryReducer from "./slices/menuCategorySlice";
 // ...
 
 export const store = configureStore({
   reducer: {
     menus: menuSliceReducer,
+    menuCategories: menuCategoryReducer,
     appSnackBar: appSnackbarReducer,
   },
 });
