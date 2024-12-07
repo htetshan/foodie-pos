@@ -13,7 +13,7 @@ const AppSnackBar = () => {
     setTimeout(() => {
       dispath(hideSnackbar());
     }, 5000);
-  }, []);
+  }, [openType]);
 
   return (
     <Box>

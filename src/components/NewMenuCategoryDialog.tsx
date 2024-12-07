@@ -28,6 +28,8 @@ const NewMenuCategoryDialog = ({ open, setOpen }: Props) => {
         <DialogContent>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Typography>new menu category </Typography>
+            {/*             jfjfl
+             */}{" "}
           </Box>
           <DialogActions>
             <Button

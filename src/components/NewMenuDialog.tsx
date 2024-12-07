@@ -8,7 +8,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { MenuType } from "../types/menu";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { createMenu } from "../store/slices/menuSlice";
@@ -18,28 +18,58 @@ import AppSnackBar from "./AppSnackBar";
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  newMenu: MenuType;
+  setNewMenu: Dispatch<SetStateAction<MenuType>>;
 }
-const NewMenuDialog = ({ open, setOpen }: Props) => {
-  const [newMenu, setNewMenu] = useState<MenuType>({ name: "", price: 0 });
+const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((store) => store.menus);
   const handleOnClick = () => {
+    console.log(newMenu);
+
+    // Validate newMenu.name
+    if (!newMenu.name) {
+      dispatch(
+        setSnackbar({
+          message: "Menu name is required. Please provide a valid name.",
+          outComeType: "error",
+          openType: true,
+        })
+      );
+      setOpen(true);
+
+      return;
+    }
+
+    // Dispatch createMenu with callbacks
     dispatch(
       createMenu({
         ...newMenu,
-        onSuccess() {
+        onSuccess: () => {
           dispatch(
-            setSnackbar({ message: "is ok now", outComeType: "success" })
+            setSnackbar({
+              message: "Menu created successfully.",
+              outComeType: "success",
+              openType: true,
+            })
           );
         },
-        onError() {
+        onError: () => {
           dispatch(
-            setSnackbar({ message: "is not ok now", outComeType: "error" })
+            setSnackbar({
+              message: "Failed to create menu. Please try again.",
+              outComeType: "error",
+              openType: true,
+            })
           );
         },
       })
     );
+
+    // Reset newMenu state
+    setNewMenu({ name: "", price: 0 });
   };
+
   return (
     <Dialog
       open={open}
@@ -54,14 +84,21 @@ const NewMenuDialog = ({ open, setOpen }: Props) => {
             <TextField
               placeholder="menu name"
               sx={{ p: 1 }}
+              value={newMenu.name || ""}
               onChange={(event) =>
                 setNewMenu({ ...newMenu, name: event.target.value })
               }
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  handleOnClick();
+                }
+              }}
             />
             <TextField
               type="number"
               placeholder="price"
               sx={{ p: 1 }}
+              value={newMenu.price || ""}
               onChange={(event) =>
                 setNewMenu({ ...newMenu, price: Number(event.target.value) })
               }
@@ -73,7 +110,7 @@ const NewMenuDialog = ({ open, setOpen }: Props) => {
                 setOpen(false);
               }}
             >
-              Cancel{" "}
+              Cancel
             </Button>
             <Button
               sx={{ width: 40, height: 35 }}

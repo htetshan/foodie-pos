@@ -22,7 +22,7 @@ export const appSnackbarSlice = createSlice({
   reducers: {
     setSnackbar: (state, action: PayloadAction<SnackbarSlice>) => {
       const { openType, outComeType, message } = action.payload;
-      state.openType = true;
+      state.openType = openType;
       state.outComeType = outComeType;
       state.message = message;
     },

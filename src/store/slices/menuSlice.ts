@@ -17,15 +17,20 @@ export const createMenu = createAsyncThunk(
     /* onError && onError();
     throw new Error("ddj"); */
 
-    const response = await fetch("http://localhost:5000/menu", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ ...payload }),
-    });
+    const response = await fetch(
+      "http://localhost:3000/api/backofficeserver/menu",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...payload }),
+      }
+    );
     const dataFromServer = await response.json();
-    const { menus } = dataFromServer;
+
+    const { menu } = dataFromServer;
+
     onSuccess && onSuccess();
-    return menus;
+    return menu;
     // thunkApi.dispatch(setMenu(dataFromServer)); //server res all menus[]... So setMenu()=> state.menu= action.payload<all menus[]>
   }
 );
@@ -52,8 +57,7 @@ export const menuSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(createMenu.fulfilled, (state, action) => {
-        console.log("return menus is now :", action.payload);
-        state.menu = action.payload;
+        state.menu = [...state.menu, action.payload];
         state.isLoading = false;
       })
       .addCase(createMenu.rejected, (state, action) => {
