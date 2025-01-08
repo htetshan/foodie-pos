@@ -1,12 +1,22 @@
 import { Box } from "@mui/material";
 import TopBarApp from "./TopBarApp";
 import SideBarApp from "./SideBarApp";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { appFetchServer } from "@/store/slices/appSlice";
 
 interface Props {
   children: ReactNode;
 }
 const BackofficeLayout = ({ children }: Props) => {
+  const dispatch = useAppDispatch();
+  const { init } = useAppSelector((state) => state.app);
+
+  useEffect(() => {
+    if (!init) {
+      dispatch(appFetchServer());
+    }
+  }, []);
   return (
     <Box sx={{ height: "100vh" }}>
       <Box sx={{ height: "10%" }}>

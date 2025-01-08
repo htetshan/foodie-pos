@@ -13,8 +13,8 @@ import {
 import React, { Dispatch, SetStateAction } from "react";
 import AppSnackBar from "./AppSnackBar";
 import { MenuCategoryType } from "@/types/menuCategory";
-import { useAppDispatch } from "@/store/hooks";
-import { addMenuCategory } from "@/store/slices/menuCategorySlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { createMenuCategory } from "@/store/slices/menuCategorySlice";
 
 interface Props {
   open: boolean;
@@ -29,10 +29,13 @@ const NewMenuCategoryDialog = ({
   setNewMenuCatgory,
 }: Props) => {
   const dispatch = useAppDispatch();
+  const { company } = useAppSelector((state) => state.company);
+
   const handleOnClick = () => {
-    console.log(newMenuCatgory);
-    dispatch(addMenuCategory(newMenuCatgory));
-    setNewMenuCatgory({ name: "", isAvailable: true });
+    const companyid = company?.id;
+    console.log("companyid", companyid);
+    if (!companyid) return null;
+    dispatch(createMenuCategory(newMenuCatgory));
   };
   return (
     <Dialog

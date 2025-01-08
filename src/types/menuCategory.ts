@@ -1,10 +1,13 @@
+import { MenuCategory } from "@prisma/client";
+
 export interface MenuCategoryType {
   name: string;
   isAvailable: boolean;
+  companyId?: number;
 }
 
 export interface MenuCategorySliceType {
-  menuCategory: MenuCategoryType[];
+  menuCategories: MenuCategory[];
   isLoading: boolean;
   error: string | null;
 }

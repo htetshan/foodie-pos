@@ -1,10 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { BaseOptionFunType } from "../../types/baseOption";
 import { MenuCategorySliceType, MenuCategoryType } from "@/types/menuCategory";
+import { config } from "@/config";
+import { MenuCategory } from "@prisma/client";
 
 // Initial state
 const initialState: MenuCategorySliceType = {
-  menuCategory: [],
+  menuCategories: [],
   isLoading: false,
   error: null,
 };
@@ -14,11 +16,13 @@ export const createMenuCategory = createAsyncThunk(
   "menuCategorySlice/createMenuCategory",
   async (newMenuCategoryParam: NewMenuCategoryParam, thunkApi) => {
     const { onSuccess, onError, ...payload } = newMenuCategoryParam;
+    console.log(payload);
+
     /* onError && onError();
     throw new Error("ddj"); */
 
     const response = await fetch(
-      "http://localhost:3000/api/backofficeserver/menu-category",
+      `${config.backOfficeAppApiBaseUrl}/menu-category`,
       {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -28,7 +32,7 @@ export const createMenuCategory = createAsyncThunk(
     const dataFromServer = await response.json();
 
     const { menuCategory } = dataFromServer;
-    thunkApi.dispatch(addMenuCategory(menuCategory));
+    thunkApi.dispatch(addMenuCategories(menuCategory));
   }
 );
 
@@ -36,21 +40,22 @@ export const menuCategorySlice = createSlice({
   name: "menuCategorySlice",
   initialState,
   reducers: {
-    setMenuCategory: (state, action: PayloadAction<MenuCategoryType[]>) => {
-      state.menuCategory = action.payload;
+    setMenuCategories: (state, action: PayloadAction<MenuCategory[]>) => {
+      state.menuCategories = action.payload;
     },
-    addMenuCategory: (state, action: PayloadAction<MenuCategoryType>) => {
-      state.menuCategory = [...state.menuCategory, action.payload];
+    addMenuCategories: (state, action: PayloadAction<MenuCategory>) => {
+      state.menuCategories = [...state.menuCategories, action.payload];
       state.isLoading = true;
     },
-    removeMenuCategory: (state, action: PayloadAction<MenuCategoryType[]>) => {
-      state.menuCategory = action.payload;
+    removeMenuCategory: (state, action: PayloadAction<MenuCategory[]>) => {
+      state.menuCategories = action.payload;
     },
   },
 });
 
 // Export actions
-export const { setMenuCategory, addMenuCategory } = menuCategorySlice.actions;
+export const { setMenuCategories, addMenuCategories } =
+  menuCategorySlice.actions;
 
 // Export reducer
 export default menuCategorySlice.reducer;
