@@ -32,8 +32,8 @@ const NewMenuCategoryDialog = ({
   const { company } = useAppSelector((state) => state.company);
 
   const handleOnClick = () => {
+    //my code error is refresh and loading companyId is missing
     const companyid = company?.id;
-    console.log("companyid", companyid);
     if (!companyid) return null;
     dispatch(createMenuCategory(newMenuCatgory));
   };

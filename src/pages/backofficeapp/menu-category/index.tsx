@@ -10,7 +10,6 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 const MenuCategory = () => {
   const [open, setOpen] = useState<boolean>(false);
   const { company } = useAppSelector((state) => state.company);
-  console.log("company", company);
 
   const [newMenuCatgory, setNewMenuCatgory] = useState<MenuCategoryType>({
     name: "",

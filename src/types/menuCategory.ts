@@ -11,3 +11,7 @@ export interface MenuCategorySliceType {
   isLoading: boolean;
   error: string | null;
 }
+export interface UpdateMenuCategoryType {
+  name: string;
+  isAvailable: boolean;
+}

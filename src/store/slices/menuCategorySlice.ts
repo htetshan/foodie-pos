@@ -36,6 +36,33 @@ export const createMenuCategory = createAsyncThunk(
   }
 );
 
+export const updateMenuCategory = createAsyncThunk(
+  "menuCategorySlice/updateMenuCategory",
+  async (updateMenuCategoryParam: NewMenuCategoryParam, thunkApi) => {
+    const { onSuccess, onError, ...payload } = updateMenuCategoryParam;
+
+    /* onError && onError();
+    throw new Error("ddj"); */
+
+    const response = await fetch(
+      `${config.backOfficeAppApiBaseUrl}/menu-category`,
+      {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...payload }),
+      }
+    );
+    const dataFromServer = await response.json();
+    const { updateMenuCategory } = dataFromServer;
+    console.log("now menucategory is updated", updateMenuCategory);
+    thunkApi.dispatch(editMenuCategory(updateMenuCategory));
+
+    /* 
+
+     */
+  }
+);
+
 export const menuCategorySlice = createSlice({
   name: "menuCategorySlice",
   initialState,
@@ -50,11 +77,16 @@ export const menuCategorySlice = createSlice({
     removeMenuCategory: (state, action: PayloadAction<MenuCategory[]>) => {
       state.menuCategories = action.payload;
     },
+    editMenuCategory: (state, action: PayloadAction<MenuCategory>) => {
+      state.menuCategories = state.menuCategories.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
+    },
   },
 });
 
 // Export actions
-export const { setMenuCategories, addMenuCategories } =
+export const { setMenuCategories, addMenuCategories, editMenuCategory } =
   menuCategorySlice.actions;
 
 // Export reducer
