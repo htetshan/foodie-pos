@@ -10,6 +10,8 @@ export default async function handler(
   const method = req.method;
 
   const session = await getSession({ req });
+  console.log(session?.user);
+
   if (session) {
     const { user } = session;
     if (user) {
@@ -122,6 +124,8 @@ export default async function handler(
           addons: [newAddon],
         });
       }
+    } else {
+      return res.status(400).send("something is wrong");
     }
   }
 
