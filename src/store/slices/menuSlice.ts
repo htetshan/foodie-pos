@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { MenuSliceType, MenuType } from "../../types/menu";
 import { BaseOptionFunType } from "../../types/baseOption";
+import { Menu } from "@prisma/client";
 
 // Initial state
 const initialState: MenuSliceType = {
-  menu: [],
+  menus: [],
   isLoading: false,
   error: null,
 };
@@ -27,8 +28,11 @@ export const createMenu = createAsyncThunk(
     );
     const dataFromServer = await response.json();
 
-    const { menu } = dataFromServer;
+    const { menu, menuCategoryMenu } = dataFromServer;
+    console.log("menu now is :", menu);
+    console.log("menuCategoryMenu is now:", menuCategoryMenu);
 
+    //thunkApi.dispatch(addMenu(menu));
     onSuccess && onSuccess();
     return menu;
     // thunkApi.dispatch(setMenu(dataFromServer)); //server res all menus[]... So setMenu()=> state.menu= action.payload<all menus[]>
@@ -39,15 +43,15 @@ export const menuSlice = createSlice({
   name: "menuSlice",
   initialState,
   reducers: {
-    setMenu: (state, action: PayloadAction<MenuType[]>) => {
-      state.menu = action.payload;
+    setMenu: (state, action: PayloadAction<Menu[]>) => {
+      state.menus = action.payload;
     },
-    addMenu: (state, action: PayloadAction<MenuType>) => {
-      state.menu = [...state.menu, action.payload];
+    addMenu: (state, action: PayloadAction<Menu>) => {
+      state.menus = [...state.menus, action.payload];
       state.isLoading = true;
     },
-    removeMenu: (state, action: PayloadAction<MenuType[]>) => {
-      state.menu = action.payload;
+    removeMenu: (state, action: PayloadAction<Menu[]>) => {
+      state.menus = action.payload;
     },
   },
   extraReducers(builder) {
@@ -57,7 +61,7 @@ export const menuSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(createMenu.fulfilled, (state, action) => {
-        state.menu = [...state.menu, action.payload];
+        state.menus = [...state.menus, action.payload];
         state.isLoading = false;
       })
       .addCase(createMenu.rejected, (state, action) => {

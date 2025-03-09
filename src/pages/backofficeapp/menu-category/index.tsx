@@ -41,6 +41,7 @@ const MenuCategory = () => {
           setNewMenuCatgory={setNewMenuCatgory}
         />
       </Box>
+
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         {menuCategories.map((item) => (
           <ItemCard

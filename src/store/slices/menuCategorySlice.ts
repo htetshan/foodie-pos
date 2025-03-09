@@ -54,7 +54,7 @@ export const updateMenuCategory = createAsyncThunk(
     );
     const dataFromServer = await response.json();
     const { updateMenuCategory } = dataFromServer;
-    console.log("now menucategory is updated", updateMenuCategory);
+    // console.log("now menucategory is updated", updateMenuCategory);
     thunkApi.dispatch(editMenuCategory(updateMenuCategory));
 
     /* 

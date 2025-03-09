@@ -23,6 +23,11 @@ export default async function handler(
     res.status(200).json({ menuCategory });
   } else if (method === "PUT") {
     const { id, ...payload } = req.body;
+    console.log(
+      "i want to know api menucategory payload is what type eg.obj or array or raw when update:",
+      payload
+    );
+
     const menuCategory = await prisma.menuCategory.findFirst({
       where: { id: id },
     });

@@ -1,10 +1,12 @@
+import { Menu } from "@prisma/client";
+
 export interface MenuType {
   name: string;
   price: number;
+  menuCategoryIds: number[];
 }
-
 export interface MenuSliceType {
-  menu: MenuType[];
+  menus: Menu[];
   isLoading: boolean;
   error: string | null;
 }

@@ -22,11 +22,18 @@ const MenuCategoryDetail = () => {
   const menuCategory = menuCategories.find(
     (item) => item.id === menuCategoryId
   );
-  if (!menuCategory) return null;
-  useEffect(() => {
-    setEditMenuCategory(menuCategory);
-  }, [menuCategory]);
+  if (!menuCategory)
+    return (
+      <BackofficeLayout>
+        <Typography>Menu Category not found</Typography>
+      </BackofficeLayout>
+    );
 
+  useEffect(() => {
+    if (menuCategory) {
+      setEditMenuCategory(menuCategory);
+    }
+  }, [menuCategory]);
   console.log(editMenuCategory);
 
   const handleUpdate = () => {
@@ -41,12 +48,6 @@ const MenuCategoryDetail = () => {
     }
   };
 
-  if (!menuCategory)
-    return (
-      <BackofficeLayout>
-        <Typography>Menu Category not found</Typography>
-      </BackofficeLayout>
-    );
   return (
     <BackofficeLayout>
       <Box
@@ -86,7 +87,9 @@ const MenuCategoryDetail = () => {
           }
           label="isAvailable"
         />
-        <Button onClick={handleUpdate}>Update</Button>
+        <Button variant="contained" content="fixed" onClick={handleUpdate}>
+          Update
+        </Button>
       </Box>
     </BackofficeLayout>
   );
