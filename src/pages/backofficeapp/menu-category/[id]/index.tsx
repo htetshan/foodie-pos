@@ -32,6 +32,8 @@ const MenuCategoryDetail = () => {
   useEffect(() => {
     if (menuCategory) {
       setEditMenuCategory(menuCategory);
+    } else {
+      setEditMenuCategory(undefined); // Optional: Reset state if menuCategory is undefined
     }
   }, [menuCategory]);
   console.log(editMenuCategory);

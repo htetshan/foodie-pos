@@ -52,6 +52,17 @@ const MenuDetail = () => {
         ) as MenuCategory
     );
   const selectedMenuCategoryIds = menuCategoryFound.map((item) => item?.id);
+  /*   above or below using return 
+
+  const menuCategoryIdss = menuCategoryMenus
+    .filter((menuIds) => menuIds.menuId === menuId)
+    .map((item) => {
+      const menuCategoryee = menuCategories.find(
+        (menuCategoryId) => menuCategoryId.id === item.menuCategoryId
+      ) as MenuCategory;
+      return menuCategoryee.id;
+    });
+ */
   console.log("menucategryIds:", selectedMenuCategoryIds);
 
   if (!menuFound)
