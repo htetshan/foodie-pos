@@ -10,7 +10,7 @@ export default async function handler(
   const method = req.method;
 
   const session = await getSession({ req });
-  console.log(session?.user);
+  //console.log(session?.user);
 
   if (session) {
     const { user } = session;
@@ -21,7 +21,7 @@ export default async function handler(
         where: { email: userEmail },
       });
       if (userFromDb) {
-        console.log("user has in db");
+        //console.log("user has in db");
         const userId = userFromDb.id;
         //user can be two companys owned but in this modelling one company find return {}
         const company = await prisma.company.findFirst({
@@ -33,8 +33,10 @@ export default async function handler(
           where: { id: companyId },
         });
         const locationId = locations.map((item) => item.id);
+
+        //why use where:{   {in:}} where : {locationId :1 and searching locationId[1,3,4] so using  in
         const tables = await prisma.table.findMany({
-          where: { id: { in: locationId } },
+          where: { locationId: { in: locationId } },
         });
         const menuCategories = await prisma.menuCategory.findMany({
           where: { companyId },
@@ -75,7 +77,7 @@ export default async function handler(
           addons,
         });
       } else {
-        console.log("first user");
+        //console.log("first user");
         const newCompany = await prisma.company.create({
           data: { name: "default company name" },
         });

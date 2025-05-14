@@ -7,7 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { signOut, useSession } from "next-auth/react";
 
-export default function ButtonAppBar() {
+export default function TopBarApp() {
   const { data } = useSession();
   return (
     <Box sx={{ flexGrow: 1 }}>
