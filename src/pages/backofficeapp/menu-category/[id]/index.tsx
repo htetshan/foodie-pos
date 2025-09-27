@@ -12,7 +12,6 @@ import {
 import { MenuCategory } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-
 const MenuCategoryDetail = () => {
   const router = useRouter();
   const [editMenuCategory, setEditMenuCategory] = useState<MenuCategory>();
@@ -22,21 +21,37 @@ const MenuCategoryDetail = () => {
   const menuCategory = menuCategories.find(
     (item) => item.id === menuCategoryId
   );
-  if (!menuCategory)
+
+  useEffect(() => {
+    if (menuCategory) {
+      setEditMenuCategory(menuCategory);
+    }
+  }, [menuCategory]);
+  /* 
+useEffect(() => { ... }, [menuCategory]) — What Triggers It?
+This useEffect runs every time menuCategory changes — regardless of whether it becomes:
+
+A defined value ({name: "drinks"})
+
+Or undefined
+
+So:
+
+✅ Initial render — menuCategory is likely undefined, and effect runs.
+
+✅ API call completes, menuCategory becomes { name: "drinks" } → effect runs.
+
+✅ Later, for some reason, menuCategory is set back to undefined → effect runs again.
+
+Each time the menuCategory value (reference) changes — even between undefined → object or object → undefined — the useEffect will re-run. */
+  if (!editMenuCategory)
     return (
       <BackofficeLayout>
         <Typography>Menu Category not found</Typography>
       </BackofficeLayout>
     );
 
-  useEffect(() => {
-    if (menuCategory) {
-      setEditMenuCategory(menuCategory);
-    } else {
-      setEditMenuCategory(undefined); // Optional: Reset state if menuCategory is undefined
-    }
-  }, [menuCategory]);
-  console.log(editMenuCategory);
+  // console.log(editMenuCategory);
 
   const handleUpdate = () => {
     if (editMenuCategory?.name === "") return null;
@@ -49,9 +64,21 @@ const MenuCategoryDetail = () => {
       router.push("/backofficeapp/menu-category");
     }
   };
+  const handleDelete = () => {
+    console.log("delete");
+  };
 
   return (
     <BackofficeLayout>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="contained"
+          sx={{ bgcolor: "red" }}
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
+      </Box>
       <Box
         sx={{
           display: "flex",
