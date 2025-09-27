@@ -3,20 +3,24 @@ import ItemCard from "@/components/ItemCard";
 import NewMenuCategoryDialog from "@/components/NewMenuCategoryDialog";
 import { MenuCategoryType } from "@/types/menuCategory";
 import { Box, Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "@/store/hooks";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 
 const MenuCategory = () => {
   const [open, setOpen] = useState<boolean>(false);
   const { company } = useAppSelector((state) => state.company);
-
   const [newMenuCatgory, setNewMenuCatgory] = useState<MenuCategoryType>({
     name: "",
     isAvailable: true,
     companyId: company?.id,
   });
   const { menuCategories } = useAppSelector((state) => state.menuCategories);
+  useEffect(() => {
+    if (company) {
+      setNewMenuCatgory({ ...newMenuCatgory, companyId: company.id });
+    }
+  }, [company]);
   return (
     <BackofficeLayout>
       <Box

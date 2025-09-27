@@ -10,8 +10,12 @@ const initialState: MenuCategorySliceType = {
   isLoading: false,
   error: null,
 };
-interface NewMenuCategoryParam extends MenuCategoryType, BaseOptionFunType {}
-
+export interface NewMenuCategoryParam
+  extends MenuCategoryType,
+    BaseOptionFunType {}
+export interface DeleMenuCategoryParam extends BaseOptionFunType {
+  id: number;
+}
 export const createMenuCategory = createAsyncThunk(
   "menuCategorySlice/createMenuCategory",
   async (newMenuCategoryParam: NewMenuCategoryParam, thunkApi) => {
@@ -40,10 +44,6 @@ export const updateMenuCategory = createAsyncThunk(
   "menuCategorySlice/updateMenuCategory",
   async (updateMenuCategoryParam: NewMenuCategoryParam, thunkApi) => {
     const { onSuccess, onError, ...payload } = updateMenuCategoryParam;
-
-    /* onError && onError();
-    throw new Error("ddj"); */
-
     const response = await fetch(
       `${config.backOfficeAppApiBaseUrl}/menu-category`,
       {
@@ -54,12 +54,17 @@ export const updateMenuCategory = createAsyncThunk(
     );
     const dataFromServer = await response.json();
     const { updateMenuCategory } = dataFromServer;
-    // console.log("now menucategory is updated", updateMenuCategory);
     thunkApi.dispatch(editMenuCategory(updateMenuCategory));
-
-    /* 
-
-     */
+  }
+);
+export const deleteMenuCategory = createAsyncThunk(
+  "menuCategorySlice/deleteMenuCategory",
+  async (deleteMenuCategoryParam: DeleMenuCategoryParam, thunkApi) => {
+    const { onSuccess, onError, id } = deleteMenuCategoryParam;
+    await fetch(`${config.backOfficeAppApiBaseUrl}/menu-category?id=${id}`, {
+      method: "DELETE",
+    });
+    thunkApi.dispatch(removeMenuCategory(id));
   }
 );
 
@@ -74,8 +79,10 @@ export const menuCategorySlice = createSlice({
       state.menuCategories = [...state.menuCategories, action.payload];
       state.isLoading = true;
     },
-    removeMenuCategory: (state, action: PayloadAction<MenuCategory[]>) => {
-      state.menuCategories = action.payload;
+    removeMenuCategory: (state, action: PayloadAction<number>) => {
+      state.menuCategories = state.menuCategories.filter((item) =>
+        item.id === action.payload ? false : true
+      );
     },
     editMenuCategory: (state, action: PayloadAction<MenuCategory>) => {
       state.menuCategories = state.menuCategories.map((item) =>
@@ -86,8 +93,12 @@ export const menuCategorySlice = createSlice({
 });
 
 // Export actions
-export const { setMenuCategories, addMenuCategories, editMenuCategory } =
-  menuCategorySlice.actions;
+export const {
+  setMenuCategories,
+  addMenuCategories,
+  editMenuCategory,
+  removeMenuCategory,
+} = menuCategorySlice.actions;
 
 // Export reducer
 export default menuCategorySlice.reducer;

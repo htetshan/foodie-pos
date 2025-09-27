@@ -14,16 +14,18 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  name      String?
-  companyId Int
-  company   Company @relation(fields: [companyId], references: [id])
+  id         Int     @id @default(autoincrement())
+  email      String  @unique
+  name       String?
+  isArchived Boolean @default(false)
+  companyId  Int
+  company    Company @relation(fields: [companyId], references: [id])
 }
 
 model Company {
   id           Int            @id @default(autoincrement())
   name         String
+  isArchived   Boolean        @default(false)
   user         User[]
   location     Location[]
   menuCategory MenuCategory[]
@@ -33,6 +35,7 @@ model Location {
   id                          Int                           @id @default(autoincrement())
   name                        String
   companyId                   Int
+  isArchived                  Boolean                       @default(false)
   company                     Company                       @relation(fields: [companyId], references: [id])
   table                       Table[]
   disableLocationMenuCategory DisableLocationMenuCategory[]
@@ -58,6 +61,7 @@ model DisableLocationMenu {
 model Table {
   id         Int      @id @default(autoincrement())
   name       String
+  isArchived Boolean  @default(false)
   locationId Int
   location   Location @relation(fields: [locationId], references: [id])
 }
@@ -66,6 +70,7 @@ model MenuCategory {
   id                          Int                           @id @default(autoincrement())
   name                        String
   isAvailable                 Boolean                       @default(true)
+  isArchived                  Boolean                       @default(false)
   companyId                   Int
   company                     Company                       @relation(fields: [companyId], references: [id])
   menuCategoryMenu            MenuCategoryMenu[]
@@ -76,6 +81,7 @@ model Menu {
   id                  Int                   @id @default(autoincrement())
   name                String
   price               Int
+  isArchived          Boolean               @default(false)
   menuCategoryMenu    MenuCategoryMenu[]
   menuAddonCategory   MenuAddonCategory[]
   disableLocationMenu DisableLocationMenu[]
@@ -92,6 +98,7 @@ model MenuCategoryMenu {
 model AddonCategory {
   id                Int                 @id @default(autoincrement())
   name              String
+  isArchived        Boolean             @default(false)
   menuAddonCategory MenuAddonCategory[]
   addon             Addon[]
 }
@@ -107,6 +114,7 @@ model MenuAddonCategory {
 model Addon {
   id              Int           @id @default(autoincrement())
   name            String
+  isArchived      Boolean       @default(false)
   addonCategoryId Int
   addonCategory   AddonCategory @relation(fields: [addonCategoryId], references: [id])
 }

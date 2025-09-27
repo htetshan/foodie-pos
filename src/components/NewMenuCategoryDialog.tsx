@@ -15,6 +15,7 @@ import AppSnackBar from "./AppSnackBar";
 import { MenuCategoryType } from "@/types/menuCategory";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { createMenuCategory } from "@/store/slices/menuCategorySlice";
+import { useRouter } from "next/router";
 
 interface Props {
   open: boolean;
@@ -29,13 +30,14 @@ const NewMenuCategoryDialog = ({
   setNewMenuCatgory,
 }: Props) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const { company } = useAppSelector((state) => state.company);
 
-  const handleOnClick = () => {
+  const handleCreateMenuCategory = () => {
     //my code error is refresh and loading companyId is missing
-    const companyid = company?.id;
-    if (!companyid) return null;
+    //but i solve in backoffice/menu-category/index.tsx using useEffect
     dispatch(createMenuCategory(newMenuCatgory));
+    setOpen(false);
   };
   return (
     <Dialog
@@ -58,11 +60,6 @@ const NewMenuCategoryDialog = ({
                   name: event.target.value,
                 })
               }
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  handleOnClick();
-                }
-              }}
             />
             <FormGroup sx={{ p: 1 }}>
               <FormControlLabel
@@ -92,7 +89,7 @@ const NewMenuCategoryDialog = ({
             <Button
               sx={{ width: 40, height: 35 }}
               variant="contained"
-              onClick={handleOnClick}
+              onClick={handleCreateMenuCategory}
             >
               Create
             </Button>

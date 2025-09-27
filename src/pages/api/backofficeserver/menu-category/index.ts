@@ -11,23 +11,17 @@ export default async function handler(
     res.status(200).send("OK GET");
   } else if (method === "POST") {
     const { name, isAvailable, companyId } = req.body;
-    console.log("comapnyId:", companyId);
-
-    const isValid = !name || isAvailable === undefined || !companyId;
-    if (isValid) {
+    const isValid = name && isAvailable !== undefined && companyId;
+    if (!isValid) {
       return res.status(400).send("Bad request");
     }
+
     const menuCategory = await prisma.menuCategory.create({
       data: { name, isAvailable, companyId },
     });
     res.status(200).json({ menuCategory });
   } else if (method === "PUT") {
     const { id, ...payload } = req.body;
-    console.log(
-      "i want to know api menucategory payload is what type eg.obj or array or raw when update:",
-      payload
-    );
-
     const menuCategory = await prisma.menuCategory.findFirst({
       where: { id: id },
     });
@@ -40,6 +34,15 @@ export default async function handler(
     });
     res.status(200).json({ updateMenuCategory });
   } else if (method === "DELETE") {
+    const menuCategoryId = Number(req.query.id);
+    const exist = await prisma.menuCategory.findFirst({
+      where: { id: menuCategoryId },
+    });
+    if (!exist) return res.status(400).send("Delete Error");
+    await prisma.menuCategory.update({
+      data: { isArchived: true },
+      where: { id: menuCategoryId },
+    });
     res.status(200).send("OK DELETE");
   }
   res.status(405).send("Invalid method");

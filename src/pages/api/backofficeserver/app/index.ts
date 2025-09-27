@@ -39,7 +39,7 @@ export default async function handler(
           where: { locationId: { in: locationId } },
         });
         const menuCategories = await prisma.menuCategory.findMany({
-          where: { companyId },
+          where: { companyId, isArchived: false },
         });
 
         const menuCategoryId = menuCategories.map((item) => item.id);

@@ -1,0 +1,22 @@
+ep31:FormControl logic why use double ->!! in
+src>pages>backofficeapp>menu-category>[id]>index.tsx
+
+<!--   <FormControlLabel
+          control={
+            <Checkbox
+              checked={!!editMenuCategory?.isAvailable}
+              /* Why?React's Checkbox component requires the checked prop to be strictly a boolean (true or false).
+                !!editMenuCategory?.isAvailable ensures that:
+                If editMenuCategory?.isAvailable is true, it stays true.
+                If editMenuCategory?.isAvailable is falsy (e.g., undefined, null, or false), it becomes false. */
+              onChange={(eve) =>
+                editMenuCategory &&
+                setEditMenuCategory({
+                  ...editMenuCategory,
+                  isAvailable: eve.target.checked,
+                })
+              }
+            />
+          }
+          label="isAvailable"
+        /> -->

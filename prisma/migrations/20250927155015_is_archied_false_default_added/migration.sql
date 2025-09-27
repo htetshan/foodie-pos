@@ -3,6 +3,7 @@ CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "name" TEXT,
+    "isArchived" BOOLEAN NOT NULL DEFAULT false,
     "companyId" INTEGER NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -12,6 +13,7 @@ CREATE TABLE "User" (
 CREATE TABLE "Company" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "isArchived" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Company_pkey" PRIMARY KEY ("id")
 );
@@ -21,6 +23,7 @@ CREATE TABLE "Location" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "companyId" INTEGER NOT NULL,
+    "isArchived" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Location_pkey" PRIMARY KEY ("id")
 );
@@ -47,6 +50,7 @@ CREATE TABLE "DisableLocationMenu" (
 CREATE TABLE "Table" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "isArchived" BOOLEAN NOT NULL DEFAULT false,
     "locationId" INTEGER NOT NULL,
 
     CONSTRAINT "Table_pkey" PRIMARY KEY ("id")
@@ -57,6 +61,7 @@ CREATE TABLE "MenuCategory" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "isAvailable" BOOLEAN NOT NULL DEFAULT true,
+    "isArchived" BOOLEAN NOT NULL DEFAULT true,
     "companyId" INTEGER NOT NULL,
 
     CONSTRAINT "MenuCategory_pkey" PRIMARY KEY ("id")
@@ -67,6 +72,7 @@ CREATE TABLE "Menu" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
+    "isArchived" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Menu_pkey" PRIMARY KEY ("id")
 );
@@ -84,6 +90,7 @@ CREATE TABLE "MenuCategoryMenu" (
 CREATE TABLE "AddonCategory" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "isArchived" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "AddonCategory_pkey" PRIMARY KEY ("id")
 );
@@ -101,6 +108,7 @@ CREATE TABLE "MenuAddonCategory" (
 CREATE TABLE "Addon" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "isArchived" BOOLEAN NOT NULL DEFAULT false,
     "addonCategoryId" INTEGER NOT NULL,
 
     CONSTRAINT "Addon_pkey" PRIMARY KEY ("id")

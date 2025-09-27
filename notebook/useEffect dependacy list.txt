@@ -1,0 +1,18 @@
+  /* 
+  useEffect Rendering
+useEffect(() => { ... }, [menuCategory]) — What Triggers It?
+This useEffect runs every time menuCategory changes — regardless of whether it becomes:
+
+A defined value ({name: "drinks"})
+
+Or undefined
+
+So:
+
+✅ Initial render — menuCategory is likely undefined, and effect runs.
+
+✅ API call completes, menuCategory becomes { name: "drinks" } → effect runs.
+
+✅ Later, for some reason, menuCategory is set back to undefined → effect runs again.
+
+Each time the menuCategory value (reference) changes — even between undefined → object or object → undefined — the useEffect will re-run. */

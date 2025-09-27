@@ -1,6 +1,10 @@
 import BackofficeLayout from "@/components/BackofficeLayout";
+import DeleteDialog from "@/components/DeleteDialog";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { updateMenuCategory } from "@/store/slices/menuCategorySlice";
+import {
+  deleteMenuCategory,
+  updateMenuCategory,
+} from "@/store/slices/menuCategorySlice";
 import {
   Box,
   Button,
@@ -13,6 +17,7 @@ import { MenuCategory } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const MenuCategoryDetail = () => {
+  const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
   const [editMenuCategory, setEditMenuCategory] = useState<MenuCategory>();
   const dispatch = useAppDispatch();
@@ -27,32 +32,13 @@ const MenuCategoryDetail = () => {
       setEditMenuCategory(menuCategory);
     }
   }, [menuCategory]);
-  /* 
-useEffect(() => { ... }, [menuCategory]) — What Triggers It?
-This useEffect runs every time menuCategory changes — regardless of whether it becomes:
 
-A defined value ({name: "drinks"})
-
-Or undefined
-
-So:
-
-✅ Initial render — menuCategory is likely undefined, and effect runs.
-
-✅ API call completes, menuCategory becomes { name: "drinks" } → effect runs.
-
-✅ Later, for some reason, menuCategory is set back to undefined → effect runs again.
-
-Each time the menuCategory value (reference) changes — even between undefined → object or object → undefined — the useEffect will re-run. */
   if (!editMenuCategory)
     return (
       <BackofficeLayout>
         <Typography>Menu Category not found</Typography>
       </BackofficeLayout>
     );
-
-  // console.log(editMenuCategory);
-
   const handleUpdate = () => {
     if (editMenuCategory?.name === "") return null;
 
@@ -64,8 +50,12 @@ Each time the menuCategory value (reference) changes — even between undefined 
       router.push("/backofficeapp/menu-category");
     }
   };
-  const handleDelete = () => {
-    console.log("delete");
+
+  const handleDeleteMenuCategory = () => {
+    const valid = menuCategories.find((item) => item.id === menuCategoryId);
+    if (!valid) return alert("Cannot delete");
+    dispatch(deleteMenuCategory({ id: menuCategoryId }));
+    router.push("/backofficeapp/menu-category");
   };
 
   return (
@@ -74,7 +64,7 @@ Each time the menuCategory value (reference) changes — even between undefined 
         <Button
           variant="contained"
           sx={{ bgcolor: "red" }}
-          onClick={handleDelete}
+          onClick={() => setOpen(true)}
         >
           Delete
         </Button>
@@ -101,10 +91,6 @@ Each time the menuCategory value (reference) changes — even between undefined 
           control={
             <Checkbox
               checked={!!editMenuCategory?.isAvailable}
-              /* Why?React's Checkbox component requires the checked prop to be strictly a boolean (true or false).
-                !!editMenuCategory?.isAvailable ensures that:
-                If editMenuCategory?.isAvailable is true, it stays true.
-                If editMenuCategory?.isAvailable is falsy (e.g., undefined, null, or false), it becomes false. */
               onChange={(eve) =>
                 editMenuCategory &&
                 setEditMenuCategory({
@@ -120,6 +106,13 @@ Each time the menuCategory value (reference) changes — even between undefined 
           Update
         </Button>
       </Box>
+      <DeleteDialog
+        open={open}
+        setOpen={setOpen}
+        title="Delte Menu Category"
+        content="menu category?"
+        handleDelete={handleDeleteMenuCategory}
+      />
     </BackofficeLayout>
   );
 };
