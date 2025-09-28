@@ -1,5 +1,7 @@
 import BackofficeLayout from "@/components/BackofficeLayout";
+import DeleteDialog from "@/components/DeleteDialog";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { deleteMenu } from "@/store/slices/menuSlice";
 import {
   Box,
   Button,
@@ -28,21 +30,17 @@ const MenuProps = {
 };
 const MenuDetail = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const menuId = Number(router.query.id);
+  const [open, setOpen] = useState<boolean>(false);
+  const [editMenu, setEditMenu] = useState<Menu>();
+  const { menus } = useAppSelector((state) => state.menus);
   const { menuCategories } = useAppSelector((state) => state.menuCategories);
   const { menuCategoryMenus } = useAppSelector(
     (state) => state.menuCategoryMenu
   );
-  const { menus } = useAppSelector((state) => state.menus);
-  const [editMenu, setEditMenu] = useState<Menu>();
+  const menu = menus.find((item) => item.id === menuId);
 
-  //dynamic route taken menuId
-  const router = useRouter();
-  const menuId = Number(router.query.id);
-  //console.log("router state initial state", router.query);
-
-  const menuFound = menus.find((item) => item.id === menuId);
-
-  //menu(useAppSelector)->menuCategoryMenu(filter)->[{id:,menuCategoryId:,menuId:},{}] ,menuCategories(find),menuCategories.id
   const menuCategoryFound = menuCategoryMenus
     .filter((menuIds) => menuIds.menuId === menuId)
     .map(
@@ -52,37 +50,18 @@ const MenuDetail = () => {
         ) as MenuCategory
     );
   const selectedMenuCategoryIds = menuCategoryFound.map((item) => item?.id);
-  /*   above or below using return 
-
-  const menuCategoryIdss = menuCategoryMenus
-    .filter((menuIds) => menuIds.menuId === menuId)
-    .map((item) => {
-      const menuCategoryee = menuCategories.find(
-        (menuCategoryId) => menuCategoryId.id === item.menuCategoryId
-      ) as MenuCategory;
-      return menuCategoryee.id;
-    });
- */
-  console.log("menucategryIds:", selectedMenuCategoryIds);
-
-  if (!menuFound)
-    return (
-      <BackofficeLayout>
-        <Typography>Menu not found</Typography>
-      </BackofficeLayout>
-    );
 
   useEffect(() => {
-    if (menuFound) {
-      setEditMenu(menuFound);
+    if (menu) {
+      setEditMenu(menu);
     }
-  }, []);
+  }, [menu]);
   // console.log(editMenu);
 
-  const handleUpdate = () => {
+  const handleUpdateMenu = () => {
     if (editMenu?.name === "") return null;
 
-    const shouldUpdate = menuFound?.name !== editMenu?.name;
+    const shouldUpdate = menu?.name !== editMenu?.name;
     if (shouldUpdate) {
       console.log("editMenu", editMenu);
 
@@ -90,9 +69,30 @@ const MenuDetail = () => {
       router.push("/backofficeapp/menu");
     }
   };
+  const handleDeleteMenu = () => {
+    const isVaild = menus.find((item) => item.id === menuId);
+    if (!isVaild) return alert("Cannot Delete");
+    dispatch(deleteMenu({ id: menuId }));
+    router.push("/backofficeapp/menu");
+  };
 
+  if (!menu)
+    return (
+      <BackofficeLayout>
+        <Typography>Menu not found</Typography>
+      </BackofficeLayout>
+    );
   return (
     <BackofficeLayout>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="contained"
+          sx={{ bgcolor: "red" }}
+          onClick={() => setOpen(true)}
+        >
+          Delete
+        </Button>
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -150,10 +150,17 @@ const MenuDetail = () => {
             ))}
           </Select>
         </FormControl>
-        <Button variant="contained" content="fixed" onClick={handleUpdate}>
+        <Button variant="contained" content="fixed" onClick={handleUpdateMenu}>
           Update
         </Button>
       </Box>
+      <DeleteDialog
+        open={open}
+        setOpen={setOpen}
+        title="Delete Menu"
+        content="Are you sure you want to delete this menu?"
+        handleDelete={handleDeleteMenu}
+      />
     </BackofficeLayout>
   );
 };

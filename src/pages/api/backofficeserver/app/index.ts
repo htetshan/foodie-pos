@@ -50,7 +50,7 @@ export default async function handler(
           (item) => item.menuId
         );
         const menus = await prisma.menu.findMany({
-          where: { id: { in: menuCategoryMenuIds } },
+          where: { id: { in: menuCategoryMenuIds }, isArchived: false },
         });
         const menuAddonCategories = await prisma.menuAddonCategory.findMany({
           where: { menuId: { in: menus.map((item) => item.id) } },

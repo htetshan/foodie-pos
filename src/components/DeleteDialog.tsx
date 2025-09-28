@@ -35,9 +35,7 @@ const DeleteDialog = ({
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Typography>
-              Are you sure you want to delete this {content}
-            </Typography>
+            <Typography>{content}</Typography>
           </Box>
           <DialogActions>
             <Button

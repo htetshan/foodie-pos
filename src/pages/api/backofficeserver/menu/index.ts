@@ -26,6 +26,13 @@ export default async function handler(
   } else if (method === "PUT") {
     res.status(200).send("OK PUT");
   } else if (method === "DELETE") {
+    const menuId = Number(req.query.id);
+    const exist = await prisma.menu.findFirst({ where: { id: menuId } });
+    if (!exist) return res.status(400).send("Menu Cannot Find");
+    await prisma.menu.update({
+      data: { isArchived: true },
+      where: { id: menuId },
+    });
     res.status(200).send("OK DELETE");
   }
   res.status(405).send("Invalid method");

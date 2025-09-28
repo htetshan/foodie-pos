@@ -110,7 +110,7 @@ const MenuCategoryDetail = () => {
         open={open}
         setOpen={setOpen}
         title="Delte Menu Category"
-        content="menu category?"
+        content="Are you sure you want to delete this menu categoy?"
         handleDelete={handleDeleteMenuCategory}
       />
     </BackofficeLayout>
