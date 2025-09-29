@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
+import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Link from "next/link";
 
@@ -25,6 +26,12 @@ const SideBarApp = () => {
       name: "Menu Category",
       link: "/backofficeapp/menu-category",
       icon: <MenuBookIcon />,
+    },
+    {
+      id: 3,
+      name: "Location",
+      link: "/backofficeapp/location",
+      icon: <AddLocationAltIcon />,
     },
   ];
   return (

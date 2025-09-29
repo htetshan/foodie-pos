@@ -4,6 +4,7 @@ import { setMenuCategories } from "./menuCategorySlice";
 import { setMenu } from "./menuSlice";
 import { setCompany } from "./companySlice";
 import { setMenuCategoryMenu } from "./menuCategoryMenuSlice";
+import { setLocations } from "./locationSlice";
 
 // Initial state
 interface AppSliceType {
@@ -22,11 +23,12 @@ export const appFetchServer = createAsyncThunk(
   async (_, thunkApi) => {
     const response = await fetch(`${config.backOfficeAppApiBaseUrl}/app`);
     const dataFromServer = await response.json();
-    const { menus, menuCategories, company, menuCategoryMenus } =
+    const { menus, menuCategories, company, menuCategoryMenus, locations } =
       dataFromServer;
     thunkApi.dispatch(setMenu(menus));
     thunkApi.dispatch(setMenuCategories(menuCategories));
     thunkApi.dispatch(setMenuCategoryMenu(menuCategoryMenus));
+    thunkApi.dispatch(setLocations(locations));
     thunkApi.dispatch(setCompany(company));
     thunkApi.dispatch(setInit(true));
   }
