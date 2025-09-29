@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+branch main
+feat: test ep32 branch knowledge of github
 First, run the development server:
 
 ```bash
