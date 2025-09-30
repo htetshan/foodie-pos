@@ -30,7 +30,7 @@ export default async function handler(
         const companyId = company?.id;
         //findMany use retrun [{},{}], so map this []
         const locations = await prisma.location.findMany({
-          where: { companyId }, // Corrected: Use companyId instead of id
+          where: { companyId, isArchived: false }, // Corrected: Use companyId instead of id
         });
         const locationId = locations.map((item) => item.id);
 

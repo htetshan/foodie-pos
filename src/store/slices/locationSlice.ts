@@ -15,7 +15,7 @@ export interface DeleLocationParam extends BaseOptionFunType {
   id: number;
 }
 export const createLocation = createAsyncThunk(
-  "menuCategorySlice/createLocation",
+  "locationSlice/createLocation",
   async (newLocationParam: NewLocationParam, thunkApi) => {
     const { onSuccess, onError, ...payload } = newLocationParam;
     const response = await fetch(`${config.backOfficeAppApiBaseUrl}/location`, {
@@ -31,22 +31,22 @@ export const createLocation = createAsyncThunk(
   }
 );
 
-export const updateMenuCategory = createAsyncThunk(
-  "menuCategorySlice/updateMenuCategory",
-  async (updateMenuCategoryParam: NewLocationParam, thunkApi) => {
-    const { onSuccess, onError, ...payload } = updateMenuCategoryParam;
+export const updateLocation = createAsyncThunk(
+  "locationSlice/updateLocation",
+  async (updateLocationParam: NewLocationParam, thunkApi) => {
+    const { onSuccess, onError, ...payload } = updateLocationParam;
     const response = await fetch(`${config.backOfficeAppApiBaseUrl}/location`, {
       method: "PUT",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ ...payload }),
     });
     const dataFromServer = await response.json();
-    const { updateMenuCategory } = dataFromServer;
-    thunkApi.dispatch(updateLocation(updateMenuCategory));
+    const { location } = dataFromServer;
+    thunkApi.dispatch(editLocation(location));
   }
 );
-export const deleteMenuCategory = createAsyncThunk(
-  "menuCategorySlice/deleteMenuCategory",
+export const deleteLocation = createAsyncThunk(
+  "locationSlice/deleteLocation",
   async (deleteMenuCategoryParam: DeleLocationParam, thunkApi) => {
     const { onSuccess, onError, id } = deleteMenuCategoryParam;
     await fetch(`${config.backOfficeAppApiBaseUrl}/location?id=${id}`, {
@@ -56,8 +56,8 @@ export const deleteMenuCategory = createAsyncThunk(
   }
 );
 
-export const menuCategorySlice = createSlice({
-  name: "menuCategorySlice",
+export const locationSlice = createSlice({
+  name: "locationSlice",
   initialState,
   reducers: {
     setLocations: (state, action: PayloadAction<Location[]>) => {
@@ -72,7 +72,7 @@ export const menuCategorySlice = createSlice({
         item.id === action.payload ? false : true
       );
     },
-    updateLocation: (state, action: PayloadAction<Location>) => {
+    editLocation: (state, action: PayloadAction<Location>) => {
       state.locations = state.locations.map((item) =>
         item.id === action.payload.id ? action.payload : item
       );
@@ -81,8 +81,8 @@ export const menuCategorySlice = createSlice({
 });
 
 // Export actions
-export const { setLocations, addLocaton, updateLocation, removeLocation } =
-  menuCategorySlice.actions;
+export const { setLocations, addLocaton, editLocation, removeLocation } =
+  locationSlice.actions;
 
 // Export reducer
-export default menuCategorySlice.reducer;
+export default locationSlice.reducer;
