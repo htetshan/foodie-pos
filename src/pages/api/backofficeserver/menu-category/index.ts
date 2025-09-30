@@ -22,17 +22,17 @@ export default async function handler(
     res.status(200).json({ menuCategory });
   } else if (method === "PUT") {
     const { id, ...payload } = req.body;
-    const menuCategory = await prisma.menuCategory.findFirst({
+    const existMenuCategory = await prisma.menuCategory.findFirst({
       where: { id: id },
     });
-    if (!menuCategory) return res.status(400).send("Bad request");
+    if (!existMenuCategory) return res.status(400).send("Bad request");
     if (payload.name === "")
       return res.status(400).send("Bad request name need");
-    const updateMenuCategory = await prisma.menuCategory.update({
+    const menuCategory = await prisma.menuCategory.update({
       data: payload,
       where: { id: id },
     });
-    res.status(200).json({ updateMenuCategory });
+    res.status(200).json({ menuCategory });
   } else if (method === "DELETE") {
     const menuCategoryId = Number(req.query.id);
     const exist = await prisma.menuCategory.findFirst({

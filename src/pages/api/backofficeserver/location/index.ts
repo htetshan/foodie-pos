@@ -18,8 +18,26 @@ export default async function handler(
     });
     res.status(200).json({ location });
   } else if (method === "PUT") {
-    res.status(200).send("OK PUT");
+    const { id, ...payload } = req.body;
+    const existLocation = await prisma.location.findFirst({
+      where: { id: id },
+    });
+    if (!existLocation) return res.status(404).send("Location Not Found");
+    const location = await prisma.location.update({
+      data: payload,
+      where: { id: id },
+    });
+    res.status(200).json({ location });
   } else if (method === "DELETE") {
+    const locationId = Number(req.query.id);
+    const exist = await prisma.location.findFirst({
+      where: { id: locationId },
+    });
+    if (!exist) return res.status(404).send("Location Not Found");
+    await prisma.location.update({
+      data: { isArchived: true },
+      where: { id: locationId },
+    });
     res.status(200).send("OK DELETE");
   } else {
     res.status(405).send("Invalid Method");

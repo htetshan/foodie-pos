@@ -53,8 +53,8 @@ export const updateMenuCategory = createAsyncThunk(
       }
     );
     const dataFromServer = await response.json();
-    const { updateMenuCategory } = dataFromServer;
-    thunkApi.dispatch(editMenuCategory(updateMenuCategory));
+    const { menuCategory } = dataFromServer;
+    thunkApi.dispatch(editMenuCategory(menuCategory));
   }
 );
 export const deleteMenuCategory = createAsyncThunk(
