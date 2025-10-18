@@ -60,8 +60,7 @@ CREATE TABLE "Table" (
 CREATE TABLE "MenuCategory" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "isAvailable" BOOLEAN NOT NULL DEFAULT true,
-    "isArchived" BOOLEAN NOT NULL DEFAULT true,
+    "isArchived" BOOLEAN NOT NULL DEFAULT false,
     "companyId" INTEGER NOT NULL,
 
     CONSTRAINT "MenuCategory_pkey" PRIMARY KEY ("id")

@@ -15,6 +15,10 @@ const Menus = () => {
     price: 0,
     menuCategoryIds: [],
   });
+  const { selectedLocation } = useAppSelector((state) => state.app);
+  const { disableLocationMenus } = useAppSelector(
+    (state) => state.disableLocationMenu
+  );
 
   /*   const handleOnClick = () => {
     dispatch(createMenu({ ...newMenu }));
@@ -45,14 +49,24 @@ const Menus = () => {
         />
       </Box>
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-        {menus.map((item) => (
-          <ItemCard
-            key={item.id}
-            icon={<MenuBookIcon />}
-            title={item.name}
-            href={`/backofficeapp/menu/${item.id}`}
-          />
-        ))}
+        {menus.map((menu) => {
+          const isAvailable = disableLocationMenus.find(
+            (item) =>
+              item.locationId === selectedLocation?.id &&
+              item.menuId === menu.id
+          )
+            ? false
+            : true;
+          return (
+            <ItemCard
+              key={menu.id}
+              icon={<MenuBookIcon />}
+              title={menu.name}
+              isAvailable={isAvailable}
+              href={`/backofficeapp/menu/${menu.id}`}
+            />
+          );
+        })}
       </Box>
     </BackofficeLayout>
   );

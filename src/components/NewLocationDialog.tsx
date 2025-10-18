@@ -32,7 +32,6 @@ const NewLocationDialog = ({
 
   const handleCreateLocation = () => {
     //if (!newLocation.name) return alert("Name is required");
-    console.log("create work ", newLocation);
     dispatch(createLocation({ ...newLocation }));
     setOpen(false);
   };
@@ -48,7 +47,7 @@ const NewLocationDialog = ({
         <DialogContent>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <TextField
-              placeholder="location name"
+              placeholder="Location name"
               sx={{ p: 1 }}
               value={newLocation.name || ""}
               onChange={(event) =>

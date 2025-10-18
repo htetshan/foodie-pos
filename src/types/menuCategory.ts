@@ -1,9 +1,8 @@
 import { MenuCategory } from "@prisma/client";
+import { BaseOptionFunType } from "./baseOption";
 
-export interface MenuCategoryType {
-  name: string;
-  isAvailable: boolean;
-  companyId?: number;
+export interface MenuCategoryType extends Partial<MenuCategory> {
+  isAvailable?: boolean;
 }
 
 export interface MenuCategorySliceType {
@@ -11,7 +10,8 @@ export interface MenuCategorySliceType {
   isLoading: boolean;
   error: string | null;
 }
-export interface UpdateMenuCategoryType {
-  name: string;
-  isAvailable: boolean;
+export interface UpdateMenuCategoryType extends BaseOptionFunType {
+  name?: string;
+  isAvailable?: boolean;
+  selectedLocationId?: number;
 }

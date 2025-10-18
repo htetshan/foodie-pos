@@ -5,6 +5,7 @@ import {
   deleteMenuCategory,
   updateMenuCategory,
 } from "@/store/slices/menuCategorySlice";
+import { UpdateMenuCategoryType } from "@/types/menuCategory";
 import {
   Box,
   Button,
@@ -13,13 +14,17 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { MenuCategory } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const MenuCategoryDetail = () => {
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
-  const [editMenuCategory, setEditMenuCategory] = useState<MenuCategory>();
+  const { selectedLocation } = useAppSelector((state) => state.app);
+  const { disableLocationMenuCategories } = useAppSelector(
+    (state) => state.disableLocationMenuCategory
+  );
+
+  const [updateData, setUpdateData] = useState<UpdateMenuCategoryType>();
   const dispatch = useAppDispatch();
   const menuCategoryId = Number(router.query.id);
   const { menuCategories } = useAppSelector((state) => state.menuCategories);
@@ -27,26 +32,29 @@ const MenuCategoryDetail = () => {
     (item) => item.id === menuCategoryId
   );
 
+  const isAvailable = disableLocationMenuCategories.find(
+    (item) =>
+      item.menuCatgoryId === menuCategoryId &&
+      item.locationId === selectedLocation?.id
+  )
+    ? false
+    : true;
+
   useEffect(() => {
     if (menuCategory) {
-      setEditMenuCategory(menuCategory);
+      setUpdateData({
+        ...menuCategory,
+        isAvailable: isAvailable,
+        selectedLocationId: selectedLocation?.id,
+      });
     }
-  }, [menuCategory]);
+  }, [menuCategory, isAvailable]);
 
-  if (!editMenuCategory)
-    return (
-      <BackofficeLayout>
-        <Typography>Menu Category not found</Typography>
-      </BackofficeLayout>
-    );
-  const handleUpdate = () => {
-    if (editMenuCategory?.name === "") return null;
-
+  const handleUpdateMenuCategory = () => {
     const shouldUpdate =
-      menuCategory?.name !== editMenuCategory?.name ||
-      menuCategory?.isAvailable !== editMenuCategory?.isAvailable;
+      menuCategory?.name !== updateData?.name || isAvailable !== undefined;
     if (shouldUpdate) {
-      editMenuCategory && dispatch(updateMenuCategory(editMenuCategory));
+      dispatch(updateMenuCategory({ ...updateData }));
       router.push("/backofficeapp/menu-category");
     }
   };
@@ -55,8 +63,15 @@ const MenuCategoryDetail = () => {
     const valid = menuCategories.find((item) => item.id === menuCategoryId);
     if (!valid) return alert("Cannot delete");
     dispatch(deleteMenuCategory({ id: menuCategoryId }));
+    setOpen(false);
     router.push("/backofficeapp/menu-category");
   };
+  if (!updateData)
+    return (
+      <BackofficeLayout>
+        <Typography>Menu Category not found</Typography>
+      </BackofficeLayout>
+    );
 
   return (
     <BackofficeLayout>
@@ -78,11 +93,11 @@ const MenuCategoryDetail = () => {
         }}
       >
         <TextField
-          value={editMenuCategory?.name}
+          value={updateData?.name}
           onChange={(eve) =>
-            editMenuCategory &&
-            setEditMenuCategory({
-              ...editMenuCategory,
+            updateData &&
+            setUpdateData({
+              ...updateData,
               name: eve.target.value,
             })
           }
@@ -90,19 +105,22 @@ const MenuCategoryDetail = () => {
         <FormControlLabel
           control={
             <Checkbox
-              checked={!!editMenuCategory?.isAvailable}
-              onChange={(eve) =>
-                editMenuCategory &&
-                setEditMenuCategory({
-                  ...editMenuCategory,
-                  isAvailable: eve.target.checked,
-                })
-              }
+              defaultChecked={isAvailable}
+              onChange={(eve, value) => {
+                setUpdateData({
+                  ...updateData,
+                  isAvailable: value,
+                });
+              }}
             />
           }
-          label="isAvailable"
+          label="Available"
         />
-        <Button variant="contained" content="fixed" onClick={handleUpdate}>
+        <Button
+          variant="contained"
+          content="fixed"
+          onClick={handleUpdateMenuCategory}
+        >
           Update
         </Button>
       </Box>

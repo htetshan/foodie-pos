@@ -36,6 +36,7 @@ const NewMenuCategoryDialog = ({
   const handleCreateMenuCategory = () => {
     //my code error is refresh and loading companyId is missing
     //but i solve in backoffice/menu-category/index.tsx using useEffect
+
     dispatch(createMenuCategory(newMenuCatgory));
     setOpen(false);
   };

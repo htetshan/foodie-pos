@@ -1,8 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { BaseOptionFunType } from "../../types/baseOption";
-import { MenuCategorySliceType, MenuCategoryType } from "@/types/menuCategory";
+import {
+  MenuCategorySliceType,
+  MenuCategoryType,
+  UpdateMenuCategoryType,
+} from "@/types/menuCategory";
 import { config } from "@/config";
 import { MenuCategory } from "@prisma/client";
+import { setDisableLocationMenuCategory } from "./disableLocationMenuCategorySlice";
 
 // Initial state
 const initialState: MenuCategorySliceType = {
@@ -20,7 +25,6 @@ export const createMenuCategory = createAsyncThunk(
   "menuCategorySlice/createMenuCategory",
   async (newMenuCategoryParam: NewMenuCategoryParam, thunkApi) => {
     const { onSuccess, onError, ...payload } = newMenuCategoryParam;
-    console.log(payload);
 
     /* onError && onError();
     throw new Error("ddj"); */
@@ -42,7 +46,7 @@ export const createMenuCategory = createAsyncThunk(
 
 export const updateMenuCategory = createAsyncThunk(
   "menuCategorySlice/updateMenuCategory",
-  async (updateMenuCategoryParam: NewMenuCategoryParam, thunkApi) => {
+  async (updateMenuCategoryParam: UpdateMenuCategoryType, thunkApi) => {
     const { onSuccess, onError, ...payload } = updateMenuCategoryParam;
     const response = await fetch(
       `${config.backOfficeAppApiBaseUrl}/menu-category`,
@@ -53,8 +57,12 @@ export const updateMenuCategory = createAsyncThunk(
       }
     );
     const dataFromServer = await response.json();
-    const { menuCategory } = dataFromServer;
-    thunkApi.dispatch(editMenuCategory(menuCategory));
+    const { menuCategory, disableLocationMenuCategories } = dataFromServer;
+
+    thunkApi.dispatch(
+      setDisableLocationMenuCategory(disableLocationMenuCategories)
+    );
+    thunkApi.dispatch(replaceMenuCategory(menuCategory));
   }
 );
 export const deleteMenuCategory = createAsyncThunk(
@@ -84,7 +92,7 @@ export const menuCategorySlice = createSlice({
         item.id === action.payload ? false : true
       );
     },
-    editMenuCategory: (state, action: PayloadAction<MenuCategory>) => {
+    replaceMenuCategory: (state, action: PayloadAction<MenuCategory>) => {
       state.menuCategories = state.menuCategories.map((item) =>
         item.id === action.payload.id ? action.payload : item
       );
@@ -96,7 +104,7 @@ export const menuCategorySlice = createSlice({
 export const {
   setMenuCategories,
   addMenuCategories,
-  editMenuCategory,
+  replaceMenuCategory,
   removeMenuCategory,
 } = menuCategorySlice.actions;
 

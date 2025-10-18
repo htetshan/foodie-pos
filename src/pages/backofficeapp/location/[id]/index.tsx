@@ -1,8 +1,16 @@
 import BackofficeLayout from "@/components/BackofficeLayout";
 import DeleteDialog from "@/components/DeleteDialog";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setSelectedLocation } from "@/store/slices/appSlice";
 import { deleteLocation, updateLocation } from "@/store/slices/locationSlice";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControlLabel,
+  Switch,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Location } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -14,6 +22,7 @@ const LocationDetail = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [editLocation, setEditLocation] = useState<Location>();
   const { locations } = useAppSelector((state) => state.locations);
+  const { selectedLocation } = useAppSelector((state) => state.app);
 
   const location = locations.find((item) => item.id === locationId);
 
@@ -74,7 +83,18 @@ const LocationDetail = () => {
             })
           }
         />
-
+        <FormControlLabel
+          control={
+            <Switch
+              checked={selectedLocation?.id === locationId}
+              onChange={() => {
+                localStorage.setItem("selectedLocationId", String(location.id));
+                dispatch(setSelectedLocation(location));
+              }}
+            />
+          }
+          label="Current Location"
+        />
         <Button
           variant="contained"
           content="fixed"

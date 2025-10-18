@@ -26,7 +26,7 @@ export const createLocation = createAsyncThunk(
     const dataFromServer = await response.json();
 
     const { location } = dataFromServer;
-    thunkApi.dispatch(addLocaton(location));
+    thunkApi.dispatch(addLocation(location));
     //thunkApi.dispatch(addLocaton(menuCategory));
   }
 );
@@ -63,7 +63,7 @@ export const locationSlice = createSlice({
     setLocations: (state, action: PayloadAction<Location[]>) => {
       state.locations = action.payload;
     },
-    addLocaton: (state, action: PayloadAction<Location>) => {
+    addLocation: (state, action: PayloadAction<Location>) => {
       state.locations = [...state.locations, action.payload];
       state.isLoading = true;
     },
@@ -81,7 +81,7 @@ export const locationSlice = createSlice({
 });
 
 // Export actions
-export const { setLocations, addLocaton, editLocation, removeLocation } =
+export const { setLocations, addLocation, editLocation, removeLocation } =
   locationSlice.actions;
 
 // Export reducer

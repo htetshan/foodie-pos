@@ -64,9 +64,6 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
 
       return;
     }
-    console.log(newMenu);
-
-    //return console.log("go to create api");
 
     // Dispatch createMenu with callbacks
     dispatch(

@@ -6,9 +6,11 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { signOut, useSession } from "next-auth/react";
+import { useAppSelector } from "@/store/hooks";
 
 export default function TopBarApp() {
   const { data } = useSession();
+  const { selectedLocation } = useAppSelector((state) => state.app);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -24,6 +26,9 @@ export default function TopBarApp() {
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             foodie pos
+          </Typography>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            {selectedLocation?.name}
           </Typography>
           {data?.user && (
             <Button color="inherit" onClick={() => signOut()}>

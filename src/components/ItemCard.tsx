@@ -10,7 +10,12 @@ interface Props {
   isAvailable?: boolean;
   subtitle?: string;
 }
-export default function ActionAreaCard({ icon, title, href }: Props) {
+export default function ActionAreaCard({
+  icon,
+  title,
+  href,
+  isAvailable,
+}: Props) {
   return (
     <Link href={href} style={{ textDecoration: "none", color: "#000000" }}>
       <Paper
@@ -25,6 +30,7 @@ export default function ActionAreaCard({ icon, title, href }: Props) {
           alignItems: "center",
           m: 2,
           cursor: "pointer",
+          opacity: isAvailable ? 1 : 0.4,
         }}
       >
         {icon}

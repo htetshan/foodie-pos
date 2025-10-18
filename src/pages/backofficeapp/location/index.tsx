@@ -46,14 +46,17 @@ const Locations = () => {
         />
       </Box>
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-        {locations.map((item) => (
-          <ItemCard
-            key={item.id}
-            icon={<MenuBookIcon />}
-            title={item.name}
-            href={`/backofficeapp/location/${item.id}`}
-          />
-        ))}
+        {locations.map((item) => {
+          return (
+            <ItemCard
+              key={item.id}
+              icon={<MenuBookIcon />}
+              title={item.name}
+              isAvailable
+              href={`/backofficeapp/location/${item.id}`}
+            />
+          );
+        })}
       </Box>
     </BackofficeLayout>
   );

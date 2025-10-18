@@ -69,7 +69,6 @@ model Table {
 model MenuCategory {
   id                          Int                           @id @default(autoincrement())
   name                        String
-  isAvailable                 Boolean                       @default(true)
   isArchived                  Boolean                       @default(false)
   companyId                   Int
   company                     Company                       @relation(fields: [companyId], references: [id])

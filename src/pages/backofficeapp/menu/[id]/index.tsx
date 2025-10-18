@@ -1,12 +1,14 @@
 import BackofficeLayout from "@/components/BackofficeLayout";
 import DeleteDialog from "@/components/DeleteDialog";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { deleteMenu } from "@/store/slices/menuSlice";
+import { deleteMenu, updateMenu } from "@/store/slices/menuSlice";
+import { UpdateMenuType } from "@/types/menu";
 import {
   Box,
   Button,
   Checkbox,
   FormControl,
+  FormControlLabel,
   InputLabel,
   ListItemText,
   MenuItem,
@@ -15,7 +17,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Menu, MenuCategory } from "@prisma/client";
+import { MenuCategory } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const ITEM_HEIGHT = 48;
@@ -33,12 +35,22 @@ const MenuDetail = () => {
   const router = useRouter();
   const menuId = Number(router.query.id);
   const [open, setOpen] = useState<boolean>(false);
-  const [editMenu, setEditMenu] = useState<Menu>();
+  const [selected, setSelected] = useState<number[]>([]);
+  const [updateData, setUpdateData] = useState<UpdateMenuType>();
   const { menus } = useAppSelector((state) => state.menus);
-  const { menuCategories } = useAppSelector((state) => state.menuCategories);
   const { menuCategoryMenus } = useAppSelector(
     (state) => state.menuCategoryMenu
   );
+  const { menuCategories } = useAppSelector((state) => state.menuCategories);
+  const { selectedLocation } = useAppSelector((state) => state.app);
+  const { disableLocationMenus } = useAppSelector(
+    (state) => state.disableLocationMenu
+  );
+  const isAvailable = disableLocationMenus.find(
+    (item) => item.menuId === menuId && item.locationId === selectedLocation?.id
+  )
+    ? false
+    : true;
   const menu = menus.find((item) => item.id === menuId);
 
   const menuCategoryFound = menuCategoryMenus
@@ -53,19 +65,23 @@ const MenuDetail = () => {
 
   useEffect(() => {
     if (menu) {
-      setEditMenu(menu);
+      setUpdateData({
+        ...menu,
+        isAvailable,
+        selectedLocationId: selectedLocation?.id,
+      });
+      setSelected(selectedMenuCategoryIds);
     }
   }, [menu]);
-  // console.log(editMenu);
+  // console.log(updateData);
 
   const handleUpdateMenu = () => {
-    if (editMenu?.name === "") return null;
-
-    const shouldUpdate = menu?.name !== editMenu?.name;
+    updateData && dispatch(updateMenu(updateData));
+    router.push("/backofficeapp/menu");
+    return;
+    const shouldUpdate =
+      menu?.name !== updateData?.name || menu?.price !== updateData?.price;
     if (shouldUpdate) {
-      console.log("editMenu", editMenu);
-
-      //this go to menuSlice and update menu  =>editMenu && dispatch(updateMenuCategory());
       router.push("/backofficeapp/menu");
     }
   };
@@ -73,10 +89,11 @@ const MenuDetail = () => {
     const isVaild = menus.find((item) => item.id === menuId);
     if (!isVaild) return alert("Cannot Delete");
     dispatch(deleteMenu({ id: menuId }));
+    setOpen(false);
     router.push("/backofficeapp/menu");
   };
 
-  if (!menu)
+  if (!updateData)
     return (
       <BackofficeLayout>
         <Typography>Menu not found</Typography>
@@ -103,22 +120,22 @@ const MenuDetail = () => {
       >
         <TextField
           sx={{ mb: 1 }}
-          value={editMenu?.name}
+          value={updateData?.name}
           onChange={(eve) =>
-            editMenu &&
-            setEditMenu({
-              ...editMenu,
+            updateData &&
+            setUpdateData({
+              ...updateData,
               name: eve.target.value,
             })
           }
         />
         <TextField
           sx={{ mb: 1 }}
-          value={editMenu?.price}
+          value={updateData?.price}
           onChange={(eve) =>
-            editMenu &&
-            setEditMenu({
-              ...editMenu,
+            updateData &&
+            setUpdateData({
+              ...updateData,
               price: Number(eve.target.value),
             })
           }
@@ -129,9 +146,13 @@ const MenuDetail = () => {
           </InputLabel>
           <Select
             multiple
-            value={selectedMenuCategoryIds}
+            value={selected}
+            onChange={(eve) => {
+              const selectedId = eve.target.value as number[];
+              setSelected(selectedId);
+            }}
             renderValue={() => {
-              const selectedMenuCategories = selectedMenuCategoryIds.map(
+              const selectedMenuCategories = selected.map(
                 (itemId) =>
                   menuCategories.find(
                     (item) => item.id === itemId
@@ -144,16 +165,32 @@ const MenuDetail = () => {
           >
             {menuCategories.map((item) => (
               <MenuItem key={item.id} value={item.id}>
-                <Checkbox checked={selectedMenuCategoryIds.includes(item.id)} />
+                <Checkbox checked={selected.includes(item.id)} />
                 <ListItemText primary={item.name} />
               </MenuItem>
             ))}
           </Select>
         </FormControl>
+        <FormControlLabel
+          control={
+            <Checkbox
+              defaultChecked={isAvailable}
+              onChange={(eve, value) => {
+                updateData &&
+                  setUpdateData({
+                    ...updateData,
+                    isAvailable: value,
+                  });
+              }}
+            />
+          }
+          label="Available"
+        />
         <Button variant="contained" content="fixed" onClick={handleUpdateMenu}>
           Update
         </Button>
       </Box>
+
       <DeleteDialog
         open={open}
         setOpen={setOpen}

@@ -16,6 +16,11 @@ const MenuCategory = () => {
     companyId: company?.id,
   });
   const { menuCategories } = useAppSelector((state) => state.menuCategories);
+  const { selectedLocation } = useAppSelector((state) => state.app);
+  const { disableLocationMenuCategories } = useAppSelector(
+    (state) => state.disableLocationMenuCategory
+  );
+
   useEffect(() => {
     if (company) {
       setNewMenuCatgory({ ...newMenuCatgory, companyId: company.id });
@@ -47,14 +52,24 @@ const MenuCategory = () => {
       </Box>
 
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-        {menuCategories.map((item) => (
-          <ItemCard
-            key={item.id}
-            icon={<MenuBookIcon />}
-            title={item.name}
-            href={`/backofficeapp/menu-category/${item.id}`}
-          />
-        ))}
+        {menuCategories.map((menuCategory) => {
+          const isAvailable = disableLocationMenuCategories.find(
+            (item) =>
+              item.menuCatgoryId === menuCategory.id &&
+              item.locationId === selectedLocation?.id
+          )
+            ? false
+            : true;
+          return (
+            <ItemCard
+              key={menuCategory.id}
+              icon={<MenuBookIcon />}
+              title={menuCategory.name}
+              isAvailable={isAvailable}
+              href={`/backofficeapp/menu-category/${menuCategory.id}`}
+            />
+          );
+        })}
       </Box>
     </BackofficeLayout>
   );
