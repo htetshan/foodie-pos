@@ -8,17 +8,24 @@ import appReducer from "./slices/appSlice";
 import menuCategoryMenuReducer from "./slices/menuCategoryMenuSlice";
 import disableLocationMenuCategoryReducer from "./slices/disableLocationMenuCategorySlice";
 import disableLocationMenuReducer from "./slices/disableLocationMenuSlice";
+import addonCategoryReducer from "./slices/addonCategorySlice";
+import menuAddonCategoryReducer from "./slices/menuAddonCategorySlice";
 // ...
 
 export const store = configureStore({
   reducer: {
     app: appReducer,
+    appSnackBar: appSnackbarReducer,
+
+    company: companyReducer,
     menus: menuSliceReducer,
     menuCategories: menuCategoryReducer,
     locations: locationReducer,
+    addonCategory: addonCategoryReducer,
+
     menuCategoryMenu: menuCategoryMenuReducer,
-    company: companyReducer,
-    appSnackBar: appSnackbarReducer,
+    menuAddonCategory: menuAddonCategoryReducer,
+
     disableLocationMenuCategory: disableLocationMenuCategoryReducer,
     disableLocationMenu: disableLocationMenuReducer,
   },

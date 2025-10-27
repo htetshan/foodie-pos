@@ -8,6 +8,8 @@ import { setLocations } from "./locationSlice";
 import { Location } from "@prisma/client";
 import { setDisableLocationMenuCategory } from "./disableLocationMenuCategorySlice";
 import { setDisableLocationMenu } from "./disableLocationMenuSlice";
+import { setAddonCategories } from "./addonCategorySlice";
+import { setMenuAddonCategory } from "./menuAddonCategorySlice";
 
 // Initial state
 interface AppSliceType {
@@ -29,11 +31,13 @@ export const appFetchServer = createAsyncThunk(
     const response = await fetch(`${config.backOfficeAppApiBaseUrl}/app`);
     const dataFromServer = await response.json();
     const {
+      company,
       menus,
       menuCategories,
-      company,
-      menuCategoryMenus,
       locations,
+      addonCategories,
+      menuAddonCategories,
+      menuCategoryMenus,
       disableLocationMenuCategories,
       disableLocationMenus,
     } = dataFromServer;
@@ -42,6 +46,8 @@ export const appFetchServer = createAsyncThunk(
     thunkApi.dispatch(setMenuCategoryMenu(menuCategoryMenus));
     thunkApi.dispatch(setLocations(locations));
     thunkApi.dispatch(setCompany(company));
+    thunkApi.dispatch(setAddonCategories(addonCategories));
+    thunkApi.dispatch(setMenuAddonCategory(menuAddonCategories));
     thunkApi.dispatch(setInit(true));
 
     thunkApi.dispatch(

@@ -1,9 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { MenuSliceType, MenuType, UpdateMenuType } from "../../types/menu";
+import {
+  MenuSliceType,
+  NewMenuPayload,
+  UpdateMenuType,
+} from "../../types/menu";
 import { BaseOptionFunType } from "../../types/baseOption";
 import { Menu } from "@prisma/client";
 import { config } from "@/config";
 import { setDisableLocationMenu } from "./disableLocationMenuSlice";
+import { setMenuCategoryMenu } from "./menuCategoryMenuSlice";
 
 // Initial state
 const initialState: MenuSliceType = {
@@ -11,7 +16,7 @@ const initialState: MenuSliceType = {
   isLoading: false,
   error: null,
 };
-export interface NewMenuParamType extends MenuType, BaseOptionFunType {}
+export interface NewMenuParamType extends NewMenuPayload, BaseOptionFunType {}
 export interface DeleteMenuParamType extends BaseOptionFunType {
   id: number;
 }
@@ -55,10 +60,10 @@ export const updateMenu = createAsyncThunk(
     );
     const dataFromServer = await response.json();
 
-    const { menu, disableLocationMenus } = dataFromServer;
+    const { menu, disableLocationMenus, menuCategoryMenus } = dataFromServer;
+    thunkApi.dispatch(replaceMenu(menu));
     thunkApi.dispatch(setDisableLocationMenu(disableLocationMenus));
-    console.log("dataFromMenuSlice", menu);
-    console.log("dataFromMenuSlice", disableLocationMenus);
+    thunkApi.dispatch(setMenuCategoryMenu(menuCategoryMenus));
   }
 );
 //"http://localhost:3000/api/backofficeserver/menu"

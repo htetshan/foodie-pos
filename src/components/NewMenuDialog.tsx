@@ -16,18 +16,18 @@ import {
   TextField,
 } from "@mui/material";
 import React, { Dispatch, SetStateAction } from "react";
-import { MenuType } from "../types/menu";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { createMenu } from "../store/slices/menuSlice";
 import { setSnackbar } from "../store/slices/appSnackbarSlice";
 import AppSnackBar from "./AppSnackBar";
 import { MenuCategory } from "@prisma/client";
+import { NewMenuPayload } from "@/types/menu";
 
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  newMenu: MenuType;
-  setNewMenu: Dispatch<SetStateAction<MenuType>>;
+  newMenu: NewMenuPayload;
+  setNewMenu: Dispatch<SetStateAction<NewMenuPayload>>;
 }
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -50,7 +50,7 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
   /*   const menuCategoryMenuIds = menuCategoryMenus.map(
     (item) => item.menuCategoryId
   ); */
-  const handleOnClick = () => {
+  const handleCreateMenu = () => {
     // Validate newMenu.name
     if (!newMenu.name) {
       dispatch(
@@ -122,7 +122,7 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
               }
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
-                  handleOnClick();
+                  handleCreateMenu();
                 }
               }}
             />
@@ -197,7 +197,7 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
             <Button
               sx={{ width: 40, height: 35 }}
               variant="contained"
-              onClick={handleOnClick}
+              onClick={handleCreateMenu}
             >
               {isLoading ? <CircularProgress /> : "Create"}
             </Button>

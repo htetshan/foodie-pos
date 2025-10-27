@@ -59,4 +59,10 @@ Episode 33
     2. Update, disable Menu
     3. Next: Addon Category, Addon, Company CRUD
 ####################################################
+Episode 34
+    1. Prisma migrate
+    2. Update menu - MenuCategoryMenu
+    3. CRUD Addon Category
+    4. Next: Addon, Company CRUD
+####################################################
 */

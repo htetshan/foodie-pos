@@ -1,7 +1,7 @@
 import { Menu } from "@prisma/client";
 import { BaseOptionFunType } from "./baseOption";
 
-export interface MenuType {
+export interface NewMenuPayload {
   name: string;
   price: number;
   menuCategoryIds: number[];

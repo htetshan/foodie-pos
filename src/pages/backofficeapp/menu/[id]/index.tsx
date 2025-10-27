@@ -58,27 +58,15 @@ const MenuDetail = () => {
     .map(
       (item) =>
         menuCategories.find(
-          (menuCategoryId) => menuCategoryId.id === item.menuCategoryId
+          (menuCategory) => menuCategory.id === item.menuCategoryId
         ) as MenuCategory
     );
   const selectedMenuCategoryIds = menuCategoryFound.map((item) => item?.id);
 
-  useEffect(() => {
-    if (menu) {
-      setUpdateData({
-        ...menu,
-        isAvailable,
-        selectedLocationId: selectedLocation?.id,
-      });
-      setSelected(selectedMenuCategoryIds);
-    }
-  }, [menu]);
-  // console.log(updateData);
-
   const handleUpdateMenu = () => {
     updateData && dispatch(updateMenu(updateData));
     router.push("/backofficeapp/menu");
-    return;
+
     const shouldUpdate =
       menu?.name !== updateData?.name || menu?.price !== updateData?.price;
     if (shouldUpdate) {
@@ -92,6 +80,24 @@ const MenuDetail = () => {
     setOpen(false);
     router.push("/backofficeapp/menu");
   };
+
+  //different useEffect style logic compare in addon-category[id],cause of type option "menuCategoryIds?"
+  useEffect(() => {
+    if (menu) {
+      setUpdateData(menu);
+      setSelected(selectedMenuCategoryIds);
+    }
+  }, [menu]);
+  useEffect(() => {
+    if (menu) {
+      setUpdateData({
+        ...menu,
+        isAvailable,
+        selectedLocationId: selectedLocation?.id,
+        menuCategoryIds: selected,
+      });
+    }
+  }, [selected]);
 
   if (!updateData)
     return (

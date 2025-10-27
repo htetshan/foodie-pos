@@ -2,7 +2,7 @@ import BackofficeLayout from "@/components/BackofficeLayout";
 import ItemCard from "@/components/ItemCard";
 import NewMenuDialog from "@/components/NewMenuDialog";
 import { useAppSelector } from "@/store/hooks";
-import { MenuType } from "@/types/menu";
+import { NewMenuPayload } from "@/types/menu";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
@@ -10,7 +10,7 @@ const Menus = () => {
   const { menus } = useAppSelector((state) => state.menus);
 
   const [open, setOpen] = useState<boolean>(false);
-  const [newMenu, setNewMenu] = useState<MenuType>({
+  const [newMenu, setNewMenu] = useState<NewMenuPayload>({
     name: "",
     price: 0,
     menuCategoryIds: [],
@@ -19,10 +19,6 @@ const Menus = () => {
   const { disableLocationMenus } = useAppSelector(
     (state) => state.disableLocationMenu
   );
-
-  /*   const handleOnClick = () => {
-    dispatch(createMenu({ ...newMenu }));
-  }; */
 
   return (
     <BackofficeLayout>

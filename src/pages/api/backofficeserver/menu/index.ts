@@ -21,15 +21,15 @@ export default async function handler(
         })
       )
     );
-    //const menuCategoryMenu=await prisma.menuCategoryMenu.create({data:{menuId:menu.id,menuCategoryId:menuCategoryIds}})
     res.status(200).json({ menu, menuCategoryMenu });
   } else if (method === "PUT") {
-    console.log(req.body);
-
-    const { id, isAvailable, selectedLocationId, ...payload } = req.body;
+    const { id, isAvailable, selectedLocationId, menuCategoryIds, ...payload } =
+      req.body;
     const exist = await prisma.menu.findFirst({ where: { id: id } });
     if (!exist) return res.status(400).send("Menu Cannot Find");
     const menu = await prisma.menu.update({ data: payload, where: { id } });
+
+    //isAvailable control logic
     if (selectedLocationId && isAvailable !== undefined) {
       if (isAvailable === false) {
         await prisma.disableLocationMenu.create({
@@ -39,11 +39,15 @@ export default async function handler(
         const disableMenu = await prisma.disableLocationMenu.findFirst({
           where: { menuId: id, locationId: selectedLocationId },
         });
-        await prisma.disableLocationMenu.delete({
-          where: { id: disableMenu?.id },
-        });
+        if (disableMenu) {
+          await prisma.disableLocationMenu.delete({
+            where: { id: disableMenu.id },
+          });
+        }
       }
     }
+
+    //find disableLocationMenus table logic
     const location = await prisma.location.findFirst({
       where: { id: selectedLocationId },
     });
@@ -51,15 +55,58 @@ export default async function handler(
     const menuCategory = await prisma.menuCategory.findMany({
       where: { companyId },
     });
-    const menuCategoryIds = menuCategory.map((itemId) => itemId.id);
-    const menuCategoryMenu = await prisma.menuCategoryMenu.findMany({
-      where: { menuCategoryId: { in: menuCategoryIds } },
+    const existingmenuCategoryMenu = await prisma.menuCategoryMenu.findMany({
+      where: {
+        menuCategoryId: { in: menuCategory.map((itemId) => itemId.id) },
+      },
     });
-    const menuIds = menuCategoryMenu.map((item) => item.menuId);
+    const menuIds = existingmenuCategoryMenu.map((item) => item.menuId);
     const disableLocationMenus = await prisma.disableLocationMenu.findMany({
       where: { menuId: { in: menuIds } },
     });
-    res.status(200).json({ menu, disableLocationMenus });
+
+    //toRemove or toAdd logic for menuCategoryMenu
+    if (menuCategoryIds) {
+      const menuCategoriesMenus = await prisma.menuCategoryMenu.findMany({
+        where: { menuId: id },
+      });
+      //toRemove
+      const toRemove = menuCategoriesMenus.filter(
+        (item) => !menuCategoryIds.includes(item.menuCategoryId)
+      );
+      if (toRemove.length) {
+        await prisma.$transaction(
+          toRemove.map((item) =>
+            prisma.menuCategoryMenu.delete({ where: { id: item.id } })
+          )
+        );
+        /*same logic compare with transaction
+         await prisma.menuCategoryMenu.deleteMany({
+          where: { id: { in: toRemove.map((item) => item.id) } },
+        }); */
+      }
+      //toAdd
+      const toAdd = menuCategoryIds.filter(
+        (menuCategoryId: number) =>
+          !menuCategoriesMenus.find(
+            (item) => item.menuCategoryId === menuCategoryId
+          )
+      );
+      if (toAdd.length) {
+        await prisma.$transaction(
+          toAdd.map((itemId: number) =>
+            prisma.menuCategoryMenu.create({
+              data: { menuId: id, menuCategoryId: itemId },
+            })
+          )
+        );
+      }
+    }
+    //find menuCategoryMenu table logic
+    const menuCategoryMenus = await prisma.menuCategoryMenu.findMany({
+      where: { menuId: id },
+    });
+    res.status(200).json({ menu, menuCategoryMenus, disableLocationMenus });
   } else if (method === "DELETE") {
     const menuId = Number(req.query.id);
     const exist = await prisma.menu.findFirst({ where: { id: menuId } });
