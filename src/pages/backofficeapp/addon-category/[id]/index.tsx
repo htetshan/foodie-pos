@@ -2,7 +2,10 @@ import BackofficeLayout from "@/components/BackofficeLayout";
 import DeleteDialog from "@/components/DeleteDialog";
 import MultiSelect from "@/components/MultiSelect";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { updateAddonCategory } from "@/store/slices/addonCategorySlice";
+import {
+  deleteAddonCategory,
+  updateAddonCategory,
+} from "@/store/slices/addonCategorySlice";
 import { UpdateAddonCategoryParam } from "@/types/addonCategory";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { Menu } from "@prisma/client";
@@ -42,7 +45,7 @@ const AddonCategoryDetail = () => {
   const handleDeleteAddonCategory = () => {
     const isVaild = addonCategories.find((item) => item.id === addonCategoryId);
     if (!isVaild) return alert("Cannot Delete");
-    //dispatch(deleteLocation({ id: locationId }));
+    dispatch(deleteAddonCategory({ id: addonCategoryId }));
     router.push("/backofficeapp/addon-category");
   };
 
@@ -117,8 +120,8 @@ const AddonCategoryDetail = () => {
       <DeleteDialog
         open={open}
         setOpen={setOpen}
-        title="Delete Location"
-        content="Are you sure you want to delete this addonCategory?"
+        title="Delete Addon Category"
+        content="Are you sure you want to delete this addon category?"
         handleDelete={handleDeleteAddonCategory}
       />
     </BackofficeLayout>

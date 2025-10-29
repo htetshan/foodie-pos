@@ -114,6 +114,7 @@ model MenuAddonCategory {
 model Addon {
   id              Int           @id @default(autoincrement())
   name            String
+  price           Int        @default(0)
   isArchived      Boolean       @default(false)
   addonCategoryId Int
   addonCategory   AddonCategory @relation(fields: [addonCategoryId], references: [id])

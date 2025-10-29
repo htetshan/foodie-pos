@@ -1,43 +1,44 @@
 import {
   Box,
   Button,
+  Checkbox,
   CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
   TextField,
 } from "@mui/material";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { createMenu } from "../store/slices/menuSlice";
 import { setSnackbar } from "../store/slices/appSnackbarSlice";
 import AppSnackBar from "./AppSnackBar";
-import { NewMenuPayload } from "@/types/menu";
 import MultiSelect from "./MultiSelect";
+import { CreateAddonCategoryParam } from "@/types/addonCategory";
+import { createAddonCategory } from "@/store/slices/addonCategorySlice";
 
 interface Props {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  newMenu: NewMenuPayload;
-  setNewMenu: Dispatch<SetStateAction<NewMenuPayload>>;
+  newAddonCategory: CreateAddonCategoryParam;
+  setNewAddonCategory: Dispatch<SetStateAction<CreateAddonCategoryParam>>;
 }
 
-const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
+const NewAddonCategoryDialog = ({
+  open,
+  setOpen,
+  newAddonCategory,
+  setNewAddonCategory,
+}: Props) => {
   const dispatch = useAppDispatch();
-  const { isLoading } = useAppSelector((store) => store.menus);
+  const { isLoading } = useAppSelector((store) => store.addonCategory);
   const [selected, setSelected] = useState<number[]>([]);
-  const { menuCategories } = useAppSelector((store) => store.menuCategories);
-  const { menuCategoryMenus } = useAppSelector(
-    (state) => state.menuCategoryMenu
-  );
-  /*   const menuCategoryMenuIds = menuCategoryMenus.map(
-    (item) => item.menuCategoryId
-  ); */
+  const { menus } = useAppSelector((store) => store.menus);
 
   const handleCreateMenu = () => {
-    // Validate newMenu.name
-    if (!newMenu.name) {
+    // Validate newAddonCategory.name
+    if (!newAddonCategory.name) {
       dispatch(
         setSnackbar({
           message: "Menu name is required. Please provide a valid name.",
@@ -52,12 +53,12 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
 
     // Dispatch createMenu with callbacks
     dispatch(
-      createMenu({
-        ...newMenu,
-        onSuccess: () => {
+      createAddonCategory({
+        ...newAddonCategory,
+        /*    onSuccess: () => {
           dispatch(
             setSnackbar({
-              message: "Menu created successfully.",
+              message: "Addon category created successfully.",
               outComeType: "success",
               openType: true,
             })
@@ -66,21 +67,19 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
         onError: () => {
           dispatch(
             setSnackbar({
-              message: "Failed to create menu. Please try again.",
+              message: "Failed to create addon category. Please try again.",
               outComeType: "error",
               openType: true,
             })
           );
-        },
+        }, */
       })
     );
 
-    // Reset newMenu state
-    //setNewMenu({ name: "", price: 0 ,});
     setOpen(false);
   };
   useEffect(() => {
-    setNewMenu({ ...newMenu, menuCategoryIds: selected });
+    setNewAddonCategory({ ...newAddonCategory, menuIds: selected });
   }, [selected]);
   return (
     <Dialog
@@ -90,7 +89,7 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
       }}
     >
       <Box sx={{ width: 350 }}>
-        <DialogTitle>Create Menu</DialogTitle>
+        <DialogTitle>Create Addon Category</DialogTitle>
         <DialogContent>
           <Box
             sx={{
@@ -101,11 +100,15 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
             }}
           >
             <TextField
-              placeholder="menu name"
+              id="addon category"
+              placeholder="Addon Category Name"
               sx={{ width: "100%", mb: 1 }}
-              value={newMenu.name || ""}
+              value={newAddonCategory.name || ""}
               onChange={(event) =>
-                setNewMenu({ ...newMenu, name: event.target.value })
+                setNewAddonCategory({
+                  ...newAddonCategory,
+                  name: event.target.value,
+                })
               }
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
@@ -114,21 +117,25 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
               }}
             />
 
-            <TextField
-              type="number"
-              placeholder="price"
-              sx={{ width: "100%", mb: 1 }}
-              value={newMenu.price || ""}
-              onChange={(event) =>
-                setNewMenu({ ...newMenu, price: Number(event.target.value) })
-              }
-            />
-
             <MultiSelect
-              title="Menu Category"
+              title="Menu"
               selected={selected}
               setSelected={setSelected}
-              itemCatalog={menuCategories}
+              itemCatalog={menus}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={newAddonCategory.isRequired}
+                  onChange={(event) => {
+                    setNewAddonCategory({
+                      ...newAddonCategory,
+                      isRequired: event.target.checked,
+                    });
+                  }}
+                />
+              }
+              label="isRequired"
             />
           </Box>
           <DialogActions>
@@ -154,4 +161,4 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
   );
 };
 
-export default NewMenuDialog;
+export default NewAddonCategoryDialog;

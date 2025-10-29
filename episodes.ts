@@ -65,4 +65,10 @@ Episode 34
     3. CRUD Addon Category
     4. Next: Addon, Company CRUD
 ####################################################
+Episode 35
+    1. CRUD Addon Category
+    2. CRUD Addon
+    3. CRUD Table
+    4. Next: Company CRUD
+####################################################
 */

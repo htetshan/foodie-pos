@@ -38,12 +38,11 @@ export const createMenu = createAsyncThunk(
     );
     const dataFromServer = await response.json();
 
-    const { menu, menuCategoryMenu } = dataFromServer;
+    const { menu, menuCategoryMenus } = dataFromServer;
 
-    //thunkApi.dispatch(addMenu(menu));
+    thunkApi.dispatch(setMenuCategoryMenu(menuCategoryMenus));
     onSuccess && onSuccess();
     return menu;
-    // thunkApi.dispatch(setMenu(dataFromServer)); //server res all menus[]... So setMenu()=> state.menu= action.payload<all menus[]>
   }
 );
 export const updateMenu = createAsyncThunk(

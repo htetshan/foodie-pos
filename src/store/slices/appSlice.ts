@@ -10,6 +10,7 @@ import { setDisableLocationMenuCategory } from "./disableLocationMenuCategorySli
 import { setDisableLocationMenu } from "./disableLocationMenuSlice";
 import { setAddonCategories } from "./addonCategorySlice";
 import { setMenuAddonCategory } from "./menuAddonCategorySlice";
+import { setAddons } from "./addonSlice";
 
 // Initial state
 interface AppSliceType {
@@ -36,6 +37,7 @@ export const appFetchServer = createAsyncThunk(
       menuCategories,
       locations,
       addonCategories,
+      addons,
       menuAddonCategories,
       menuCategoryMenus,
       disableLocationMenuCategories,
@@ -47,6 +49,7 @@ export const appFetchServer = createAsyncThunk(
     thunkApi.dispatch(setLocations(locations));
     thunkApi.dispatch(setCompany(company));
     thunkApi.dispatch(setAddonCategories(addonCategories));
+    thunkApi.dispatch(setAddons(addons));
     thunkApi.dispatch(setMenuAddonCategory(menuAddonCategories));
     thunkApi.dispatch(setInit(true));
 

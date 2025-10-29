@@ -9,8 +9,14 @@ export interface AddonCategorySliceType {
 
 export interface NewAddonCategoryParam
   extends AddonCategory,
-    BaseOptionFunType {}
-
+    BaseOptionFunType {
+  menuIds?: number[];
+}
+export interface CreateAddonCategoryParam extends BaseOptionFunType {
+  name: string;
+  isRequired: boolean;
+  menuIds: number[];
+}
 export interface UpdateAddonCategoryParam
   extends AddonCategory,
     BaseOptionFunType {

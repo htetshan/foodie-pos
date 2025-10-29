@@ -1,56 +1,57 @@
 import BackofficeLayout from "@/components/BackofficeLayout";
 import DeleteDialog from "@/components/DeleteDialog";
+import SingleSelect from "@/components/SingleSelect";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setSelectedLocation } from "@/store/slices/appSlice";
-import { deleteLocation, updateLocation } from "@/store/slices/locationSlice";
-import {
-  Box,
-  Button,
-  FormControlLabel,
-  Switch,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { Location } from "@prisma/client";
+import { deleteAddon, updateAddon } from "@/store/slices/addonSlice";
+import { UpdateAddonParam } from "@/types/addon";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-const LocationDetail = () => {
+const AddonDetail = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const locationId = Number(router.query.id);
+  const addonId = Number(router.query.id);
   const [open, setOpen] = useState<boolean>(false);
-  const [editLocation, setEditLocation] = useState<Location>();
-  const { locations } = useAppSelector((state) => state.locations);
-  const { selectedLocation } = useAppSelector((state) => state.app);
+  const [selected, setSelected] = useState<number>();
+  const [updateData, setUpdateData] = useState<UpdateAddonParam>();
+  const { addons } = useAppSelector((state) => state.addon);
+  const { addonCategories } = useAppSelector((state) => state.addonCategory);
+  const addon = addons.find((item) => item.id === addonId);
 
-  const location = locations.find((item) => item.id === locationId);
+  const handleUpdateAddon = () => {
+    updateData && dispatch(updateAddon(updateData));
+    router.push("/backofficeapp/addon");
+
+    /*    if (updateData?.name === "") return null;
+    const shouldUpdate = addon?.name !== updateData?.name;
+    if (shouldUpdate) {
+      updateData && dispatch(updateLocation(updateData));
+    } */
+  };
+  const handleDeleteAddon = () => {
+    const isVaild = addons.find((item) => item.id === addonId);
+    if (!isVaild) return alert("Cannot Delete");
+    dispatch(deleteAddon({ id: addonId }));
+    router.push("/backofficeapp/addon");
+  };
 
   useEffect(() => {
-    if (location) {
-      setEditLocation(location);
+    if (addon) {
+      setUpdateData(addon);
+      setSelected(addon.addonCategoryId);
     }
-  }, [location]);
-
-  const handleUpdateLocation = () => {
-    if (editLocation?.name === "") return null;
-    const shouldUpdate = location?.name !== editLocation?.name;
-    if (shouldUpdate) {
-      editLocation && dispatch(updateLocation(editLocation));
-      router.push("/backofficeapp/location");
+  }, [addon]);
+  useEffect(() => {
+    if (updateData && selected) {
+      setUpdateData({ ...updateData, addonCategoryId: selected });
     }
-  };
-  const handleDeleteLocation = () => {
-    const isVaild = locations.find((item) => item.id === locationId);
-    if (!isVaild) return alert("Cannot Delete");
-    dispatch(deleteLocation({ id: locationId }));
-    router.push("/backofficeapp/location");
-  };
+  }, [selected]);
 
-  if (!location)
+  if (!addon)
     return (
       <BackofficeLayout>
-        <Typography>Location not found</Typography>
+        <Typography>Addon not found</Typography>
       </BackofficeLayout>
     );
   return (
@@ -64,6 +65,7 @@ const LocationDetail = () => {
           Delete
         </Button>
       </Box>
+
       <Box
         sx={{
           display: "flex",
@@ -74,44 +76,45 @@ const LocationDetail = () => {
       >
         <TextField
           sx={{ mb: 1 }}
-          value={editLocation?.name}
+          value={updateData?.name}
           onChange={(eve) =>
-            editLocation &&
-            setEditLocation({
-              ...editLocation,
+            updateData &&
+            setUpdateData({
+              ...updateData,
               name: eve.target.value,
             })
           }
         />
-        <FormControlLabel
-          control={
-            <Switch
-              checked={selectedLocation?.id === locationId}
-              onChange={() => {
-                localStorage.setItem("selectedLocationId", String(location.id));
-                dispatch(setSelectedLocation(location));
-              }}
-            />
+        <TextField
+          sx={{ mb: 1 }}
+          value={updateData?.price}
+          onChange={(eve) =>
+            updateData &&
+            setUpdateData({
+              ...updateData,
+              price: Number(eve.target.value),
+            })
           }
-          label="Current Location"
         />
-        <Button
-          variant="contained"
-          content="fixed"
-          onClick={handleUpdateLocation}
-        >
+        <SingleSelect
+          title="Addon"
+          selected={selected}
+          setSelected={setSelected}
+          itemCatalog={addonCategories}
+        />
+        <Button variant="contained" content="fixed" onClick={handleUpdateAddon}>
           Update
         </Button>
       </Box>
       <DeleteDialog
         open={open}
         setOpen={setOpen}
-        title="Delete Location"
-        content="Are you sure you want to delete this location?"
-        handleDelete={handleDeleteLocation}
+        title="Delete Addon"
+        content="Are you sure you want to delete this addon?"
+        handleDelete={handleDeleteAddon}
       />
     </BackofficeLayout>
   );
 };
 
-export default LocationDetail;
+export default AddonDetail;

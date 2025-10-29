@@ -10,7 +10,20 @@ export default async function handler(
   if (method === "GET") {
     res.status(200).send("OK GET");
   } else if (method === "POST") {
-    res.status(200).send("OK POST");
+    const { name, isRequired, menuIds } = req.body;
+    const isValid = name && isRequired !== undefined && menuIds.length > 0;
+    if (!isValid) return res.status(400).send("Bad request");
+    const addonCategory = await prisma.addonCategory.create({
+      data: { name, isRequired },
+    });
+    const menuAddonCategories = await prisma.$transaction(
+      menuIds.map((item: number) =>
+        prisma.menuAddonCategory.create({
+          data: { addonCategoryId: addonCategory.id, menuId: item },
+        })
+      )
+    );
+    res.status(200).json({ addonCategory, menuAddonCategories });
   } else if (method === "PUT") {
     const { id, name, isRequired, menuIds, companyId } = req.body;
     const exist = await prisma.addonCategory.findFirst({ where: { id: id } });
@@ -66,6 +79,16 @@ export default async function handler(
 
     res.status(200).send("OK PUT");
   } else if (method === "DELETE") {
+    const addonCategoryId = Number(req.query.id);
+    const exist = await prisma.addonCategory.findFirst({
+      where: { id: addonCategoryId },
+    });
+    if (!exist) return res.status(400).send("Bad request");
+    await prisma.addonCategory.update({
+      data: { isArchived: true },
+      where: { id: addonCategoryId },
+    });
+
     res.status(200).send("OK DELETE");
   } else {
     res.status(405).send("Invalid Method");

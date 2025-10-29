@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Addon" ADD COLUMN     "price" INTEGER NOT NULL DEFAULT 0;

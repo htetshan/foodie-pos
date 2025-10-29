@@ -3,8 +3,8 @@ import { config } from "@/config";
 import { AddonCategory } from "@prisma/client";
 import {
   AddonCategorySliceType,
+  CreateAddonCategoryParam,
   DeleteAddonCategoryParam,
-  NewAddonCategoryParam,
   UpdateAddonCategoryParam,
 } from "@/types/addonCategory";
 import { setMenuAddonCategory } from "./menuAddonCategorySlice";
@@ -18,7 +18,7 @@ const initialState: AddonCategorySliceType = {
 
 export const createAddonCategory = createAsyncThunk(
   "addonCategorySlice/createAddonCategory",
-  async (newAddonCategoryParam: NewAddonCategoryParam, thunkApi) => {
+  async (newAddonCategoryParam: CreateAddonCategoryParam, thunkApi) => {
     const { onSuccess, onError, ...payload } = newAddonCategoryParam;
     const response = await fetch(
       `${config.backOfficeAppApiBaseUrl}/addon-category`,
@@ -32,6 +32,8 @@ export const createAddonCategory = createAsyncThunk(
 
     const { addonCategory, menuAddonCategories } = dataFromServer;
     thunkApi.dispatch(addAddonCategory(addonCategory));
+    thunkApi.dispatch(setMenuAddonCategory(menuAddonCategories));
+    onSuccess && onSuccess();
   }
 );
 

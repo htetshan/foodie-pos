@@ -2,24 +2,20 @@ import BackofficeLayout from "@/components/BackofficeLayout";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Button } from "@mui/material";
-import { useEffect, useState } from "react";
-import NewLocationDialog from "@/components/NewLocationDialog";
+import { useState } from "react";
 import ClassIcon from "@mui/icons-material/Class";
-import { LocationType } from "@/types/location";
-const Locations = () => {
+import NewAddonCategoryDialog from "@/components/NewAddonCategoryDialog";
+import { CreateAddonCategoryParam } from "@/types/addonCategory";
+const AddonCategory = () => {
   const { addonCategories } = useAppSelector((state) => state.addonCategory);
-  const { company } = useAppSelector((state) => state.company);
 
   const [open, setOpen] = useState<boolean>(false);
-  const [newLocation, setNewLocation] = useState<LocationType>({
-    name: "",
-    companyId: company?.id,
-  });
-  useEffect(() => {
-    if (company) {
-      setNewLocation({ ...newLocation, companyId: company.id });
-    }
-  }, [company]);
+  const [newAddonCategory, setNewAddonCategory] =
+    useState<CreateAddonCategoryParam>({
+      name: "",
+      isRequired: true,
+      menuIds: [],
+    });
 
   return (
     <BackofficeLayout>
@@ -36,13 +32,13 @@ const Locations = () => {
             setOpen(true);
           }}
         >
-          New Location
+          New Addon Category
         </Button>
-        <NewLocationDialog
+        <NewAddonCategoryDialog
           open={open}
           setOpen={setOpen}
-          newLocation={newLocation}
-          setNewLocation={setNewLocation}
+          newAddonCategory={newAddonCategory}
+          setNewAddonCategory={setNewAddonCategory}
         />
       </Box>
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
@@ -62,4 +58,4 @@ const Locations = () => {
   );
 };
 
-export default Locations;
+export default AddonCategory;
