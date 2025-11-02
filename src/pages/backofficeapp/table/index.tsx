@@ -3,23 +3,24 @@ import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import NewLocationDialog from "@/components/NewLocationDialog";
-import { LocationType } from "@/types/location";
-const Locations = () => {
-  const { locations } = useAppSelector((state) => state.locations);
-  const { company } = useAppSelector((state) => state.company);
+import TableBarIcon from "@mui/icons-material/TableBar";
+
+import { CreateTableParam } from "@/types/table";
+import NewTableDialog from "@/components/NewTableDialog";
+const Tables = () => {
+  const { tables } = useAppSelector((state) => state.table);
+  const { selectedLocation } = useAppSelector((state) => state.app);
 
   const [open, setOpen] = useState<boolean>(false);
-  const [newLocation, setNewLocation] = useState<LocationType>({
+  const [newTable, setNewTable] = useState<CreateTableParam>({
     name: "",
-    companyId: company?.id,
+    locationId: selectedLocation?.id,
   });
   useEffect(() => {
-    if (company) {
-      setNewLocation({ ...newLocation, companyId: company.id });
+    if (selectedLocation) {
+      setNewTable({ ...newTable, locationId: selectedLocation.id });
     }
-  }, [company]);
+  }, [selectedLocation]);
 
   return (
     <BackofficeLayout>
@@ -36,24 +37,24 @@ const Locations = () => {
             setOpen(true);
           }}
         >
-          New Location
+          New Table
         </Button>
-        <NewLocationDialog
-          open={open}
-          setOpen={setOpen}
-          newLocation={newLocation}
-          setNewLocation={setNewLocation}
-        />
       </Box>
+      <NewTableDialog
+        open={open}
+        setOpen={setOpen}
+        newTable={newTable}
+        setNewTable={setNewTable}
+      />
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-        {locations.map((item) => {
+        {tables.map((item) => {
           return (
             <ItemCard
               key={item.id}
-              icon={<MenuBookIcon />}
+              icon={<TableBarIcon />}
               title={item.name}
               isAvailable
-              href={`/backofficeapp/location/${item.id}`}
+              href={`/backofficeapp/table/${item.id}`}
             />
           );
         })}
@@ -62,4 +63,4 @@ const Locations = () => {
   );
 };
 
-export default Locations;
+export default Tables;

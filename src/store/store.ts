@@ -10,6 +10,7 @@ import disableLocationMenuCategoryReducer from "./slices/disableLocationMenuCate
 import disableLocationMenuReducer from "./slices/disableLocationMenuSlice";
 import addonCategoryReducer from "./slices/addonCategorySlice";
 import addonReducer from "./slices/addonSlice";
+import tableReducer from "./slices/tablesSlice";
 import menuAddonCategoryReducer from "./slices/menuAddonCategorySlice";
 // ...
 
@@ -24,6 +25,7 @@ export const store = configureStore({
     locations: locationReducer,
     addonCategory: addonCategoryReducer,
     addon: addonReducer,
+    table: tableReducer,
 
     menuCategoryMenu: menuCategoryMenuReducer,
     menuAddonCategory: menuAddonCategoryReducer,

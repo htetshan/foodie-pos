@@ -71,4 +71,9 @@ Episode 35
     3. CRUD Table
     4. Next: Company CRUD
 ####################################################
+Episode 36
+    1. CRUD Table
+    2. Update Company
+    3. Next: Asset upload
+####################################################
 */

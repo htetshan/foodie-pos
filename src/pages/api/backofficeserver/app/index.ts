@@ -36,7 +36,8 @@ export default async function handler(
 
         //why use where:{   {in:}} where : {locationId :1 and searching locationId[1,3,4] so using  in
         const tables = await prisma.table.findMany({
-          where: { locationId: { in: locationId } },
+          orderBy: { id: "asc" },
+          where: { locationId: { in: locationId }, isArchived: false },
         });
         const menuCategories = await prisma.menuCategory.findMany({
           orderBy: { id: "asc" },

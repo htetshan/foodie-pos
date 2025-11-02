@@ -48,8 +48,8 @@ export const updateAddon = createAsyncThunk(
 );
 export const deleteAddon = createAsyncThunk(
   "addonSlice/deleteAddon",
-  async (deleteMenuCategoryParam: DeleteAddonParam, thunkApi) => {
-    const { onSuccess, onError, id } = deleteMenuCategoryParam;
+  async (deleteTableParam: DeleteAddonParam, thunkApi) => {
+    const { onSuccess, onError, id } = deleteTableParam;
     await fetch(`${config.backOfficeAppApiBaseUrl}/addon?id=${id}`, {
       method: "DELETE",
     });
