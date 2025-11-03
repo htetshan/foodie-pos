@@ -12,6 +12,7 @@ import { setAddonCategories } from "./addonCategorySlice";
 import { setMenuAddonCategory } from "./menuAddonCategorySlice";
 import { setAddons } from "./addonSlice";
 import { setTables } from "./tablesSlice";
+import { UploadAssetPayload } from "@/types/menu";
 
 // Initial state
 interface AppSliceType {
@@ -68,6 +69,23 @@ export const appFetchServer = createAsyncThunk(
       );
       thunkApi.dispatch(setSelectedLocation(selectedLocation));
     }
+  }
+);
+export const uploadAsset = createAsyncThunk(
+  "addonSlice/uploadAsset",
+  async (uploadAssetPayload: UploadAssetPayload, thunkApi) => {
+    const { onSuccess, onError, file } = uploadAssetPayload;
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch(`${config.backOfficeAppApiBaseUrl}/asset`, {
+      method: "POST",
+      body: formData,
+    });
+    const dataFromServer = await response.json();
+    const { assetUrl } = dataFromServer;
+    onSuccess && onSuccess(assetUrl);
+    //    thunkApi.dispatch(replaceAddon(addon));
   }
 );
 

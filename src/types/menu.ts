@@ -4,6 +4,7 @@ import { BaseOptionFunType } from "./baseOption";
 export interface NewMenuPayload {
   name: string;
   price: number;
+  assetUrl?: String;
   menuCategoryIds: number[];
 }
 export interface MenuSliceType {
@@ -15,4 +16,8 @@ export interface UpdateMenuType extends Menu, BaseOptionFunType {
   selectedLocationId?: number;
   isAvailable?: boolean;
   menuCategoryIds?: number[];
+}
+
+export interface UploadAssetPayload extends BaseOptionFunType {
+  file: File;
 }

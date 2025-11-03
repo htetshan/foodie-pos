@@ -10,11 +10,13 @@ import {
 } from "@mui/material";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { createMenu } from "../store/slices/menuSlice";
 import { setSnackbar } from "../store/slices/appSnackbarSlice";
 import AppSnackBar from "./AppSnackBar";
 import { NewMenuPayload } from "@/types/menu";
 import MultiSelect from "./MultiSelect";
+import { uploadAsset } from "@/store/slices/appSlice";
+import FileDropZone from "./FileDropZone";
+import { createMenu } from "@/store/slices/menuSlice";
 
 interface Props {
   open: boolean;
@@ -27,6 +29,8 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((store) => store.menus);
   const [selected, setSelected] = useState<number[]>([]);
+  const [menuImage, setMenuImage] = useState<File[]>([]);
+
   const { menuCategories } = useAppSelector((store) => store.menuCategories);
   const { menuCategoryMenus } = useAppSelector(
     (state) => state.menuCategoryMenu
@@ -49,9 +53,19 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
 
       return;
     }
-
+    if (menuImage) {
+      dispatch(
+        uploadAsset({
+          file: menuImage[0],
+          onSuccess: (assetUrl) => {
+            newMenu.assetUrl = assetUrl;
+            createMenu({ ...newMenu });
+          },
+        })
+      );
+    }
     // Dispatch createMenu with callbacks
-    dispatch(
+    /*  dispatch(
       createMenu({
         ...newMenu,
         onSuccess: () => {
@@ -73,7 +87,7 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
           );
         },
       })
-    );
+    ); */
 
     // Reset newMenu state
     //setNewMenu({ name: "", price: 0 ,});
@@ -131,6 +145,11 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
               itemCatalog={menuCategories}
             />
           </Box>
+          <FileDropZone
+            onDrop={(files) => {
+              setMenuImage(files);
+            }}
+          />
           <DialogActions>
             <Button
               onClick={() => {

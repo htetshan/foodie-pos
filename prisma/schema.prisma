@@ -61,6 +61,7 @@ model DisableLocationMenu {
 model Table {
   id         Int      @id @default(autoincrement())
   name       String
+  assetUrl   String?
   isArchived Boolean  @default(false)
   locationId Int
   location   Location @relation(fields: [locationId], references: [id])
@@ -81,6 +82,7 @@ model Menu {
   name                String
   price               Int
   isArchived          Boolean               @default(false)
+  assetUrl            String?
   menuCategoryMenu    MenuCategoryMenu[]
   menuAddonCategory   MenuAddonCategory[]
   disableLocationMenu DisableLocationMenu[]
