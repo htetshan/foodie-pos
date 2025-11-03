@@ -85,6 +85,8 @@ export const uploadAsset = createAsyncThunk(
     const dataFromServer = await response.json();
     const { assetUrl } = dataFromServer;
     onSuccess && onSuccess(assetUrl);
+    console.log(assetUrl);
+
     //    thunkApi.dispatch(replaceAddon(addon));
   }
 );

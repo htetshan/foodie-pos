@@ -5,7 +5,6 @@ import { config } from "@/config";
 const s3Client = new S3Client({
   endpoint: config.minioEndpoint,
   region: "us-east-1",
-
   credentials: {
     accessKeyId: config.minioAcceptKeyId,
     secretAccessKey: config.minioSecretAcceptKey,
