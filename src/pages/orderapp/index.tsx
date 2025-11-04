@@ -1,77 +1,32 @@
-// src/pages/orderapp/index.tsx (Full Component)
+import { useState } from "react";
+import FileDropZone from "@/components/FileDropZone";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+export default function Home() {
+  const [imageUrl, setImageUrl] = useState("");
 
-const OrderApp = () => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadMessage, setUploadMessage] = useState<string>("");
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setSelectedFile(event.target.files[0]);
-      setUploadMessage("");
-    } else {
-      setSelectedFile(null);
-    }
-  };
-
-  const handleUploadSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!selectedFile) {
-      setUploadMessage("Please select an image file first.");
-      return;
-    }
-
-    setUploadMessage("Uploading image...");
-
+  const handleUpload = async (file: File) => {
     const formData = new FormData();
-    formData.append("image", selectedFile);
+    formData.append("file", file);
 
-    try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUploadMessage(`✅ Success! Key: ${data.key}, URL: ${data.url}`);
-        setSelectedFile(null);
-      } else {
-        const error = await response.json();
-        setUploadMessage(`❌ Upload failed: ${error.error || "Server error"}`);
-      }
-    } catch (error) {
-      console.error("Network or request error:", error);
-      setUploadMessage("❌ An unexpected error occurred during upload.");
-    }
+    const res = await fetch("/api/asset", { method: "POST", body: formData });
+    const data = await res.json();
+    setImageUrl(data.assetUrl);
   };
 
   return (
-    <div>
-      <h2>🖼️ MinIO Image Upload</h2>
-      <form onSubmit={handleUploadSubmit}>
-        <input
-          type="file"
-          accept="image/*" // Restrict to image files
-          onChange={handleFileChange}
-          required
-        />
-        <button
-          type="submit"
-          disabled={!selectedFile || uploadMessage.includes("Uploading")}
-        >
-          {uploadMessage.includes("Uploading")
-            ? "Processing..."
-            : "Upload to MinIO"}
-        </button>
-      </form>
-      {uploadMessage && (
-        <p style={{ marginTop: "10px" }}>**Status:** {uploadMessage}</p>
+    <div style={{ padding: 20 }}>
+      <h4>
+        ChatGpt MinIO object storage overview:
+        https://chatgpt.com/share/6909a66d-a804-8002-83c0-9ff1deca8db7
+      </h4>
+      <h2>Upload Image to MinIO</h2>
+      <FileDropZone onDrop={(files) => handleUpload(files[0])} />
+      {imageUrl && (
+        <div style={{ marginTop: 20 }}>
+          <h3>Uploaded Image:</h3>
+          <img src={imageUrl} alt="Uploaded" style={{ width: 200 }} />
+        </div>
       )}
     </div>
   );
-};
-
-export default OrderApp;
+}
