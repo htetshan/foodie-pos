@@ -11,7 +11,12 @@ export default async function handler(req: Request, res: Response) {
   if (method === "POST") {
     assetUploadFunction(req, res, (error) => {
       if (error) {
+        console.error("Multer error:", error);
         return res.status(500).send("Internal Server Error.");
+      }
+      if (!req.file) {
+        console.error("No file uploaded");
+        return res.status(400).send("No file uploaded");
       }
       const file = req.file as Express.MulterS3.File;
       const assetUrl = file.location;

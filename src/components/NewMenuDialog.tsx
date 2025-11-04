@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Chip,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -29,7 +30,7 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((store) => store.menus);
   const [selected, setSelected] = useState<number[]>([]);
-  const [menuImage, setMenuImage] = useState<File[]>([]);
+  const [menuImage, setMenuImage] = useState<File>();
 
   const { menuCategories } = useAppSelector((store) => store.menuCategories);
   const { menuCategoryMenus } = useAppSelector(
@@ -56,7 +57,7 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
     if (menuImage) {
       dispatch(
         uploadAsset({
-          file: menuImage[0],
+          file: menuImage,
           onSuccess: (assetUrl) => {
             newMenu.assetUrl = assetUrl;
             createMenu({ ...newMenu });
@@ -145,11 +146,14 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
               itemCatalog={menuCategories}
             />
           </Box>
-          <FileDropZone
-            onDrop={(files) => {
-              setMenuImage(files);
-            }}
-          />
+          <FileDropZone onDrop={(files) => setMenuImage(files[0])} />
+          {menuImage && (
+            <Chip
+              sx={{ mt: 2 }}
+              label={menuImage.name}
+              onDelete={() => setMenuImage(undefined)}
+            />
+          )}
           <DialogActions>
             <Button
               onClick={() => {

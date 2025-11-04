@@ -5,6 +5,7 @@ import { config } from "@/config";
 const s3Client = new S3Client({
   endpoint: config.minioEndpoint,
   region: "us-east-1",
+  forcePathStyle: true,
   credentials: {
     accessKeyId: config.minioAcceptKeyId,
     secretAccessKey: config.minioSecretAcceptKey,
@@ -17,7 +18,7 @@ export const assetUploadFunction = multer({
     bucket: "miniohtet",
     acl: "public-read",
     key: (request, file, cb) => {
-      cb(null, `foodie/${Date.now()}_${file.originalname}`);
+      cb(null, `miniohtet/${Date.now()}_${file.originalname}`);
     },
   }),
 }).single("file");
