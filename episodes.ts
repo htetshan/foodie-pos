@@ -76,4 +76,10 @@ Episode 36
     2. Update Company
     3. Next: Asset upload
 ####################################################
+Episode 37
+    1. Asset upload
+    2. Layout refactor
+    3. Next: Order app
+    Note: Responsive is not well now 
+####################################################
 */

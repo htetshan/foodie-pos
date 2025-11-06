@@ -18,7 +18,7 @@ export const assetUploadFunction = multer({
     bucket: "miniohtet",
     acl: "public-read",
     key: (request, file, cb) => {
-      cb(null, `miniohtet/${Date.now()}_${file.originalname}`);
+      cb(null, `testfoodie/${Date.now()}_${file.originalname}`);
     },
   }),
 }).single("file");

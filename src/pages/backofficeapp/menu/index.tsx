@@ -1,11 +1,10 @@
 import BackofficeLayout from "@/components/BackofficeLayout";
-import ItemCard from "@/components/ItemCard";
+import MenuCard from "@/components/MenuCard";
 import NewMenuDialog from "@/components/NewMenuDialog";
 import { useAppSelector } from "@/store/hooks";
 import { NewMenuPayload } from "@/types/menu";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
 const Menus = () => {
   const { menus } = useAppSelector((state) => state.menus);
 
@@ -19,7 +18,7 @@ const Menus = () => {
   const { disableLocationMenus } = useAppSelector(
     (state) => state.disableLocationMenu
   );
-
+  if (!menus) return null;
   return (
     <BackofficeLayout>
       <Box
@@ -54,6 +53,22 @@ const Menus = () => {
             ? false
             : true;
           return (
+            <MenuCard
+              menu={menu}
+              href={`/backofficeapp/menu/${menu.id}`}
+              isAvailable={isAvailable}
+            />
+          );
+        })}
+        {/*  {menus.map((menu) => {
+          const isAvailable = disableLocationMenus.find(
+            (item) =>
+              item.locationId === selectedLocation?.id &&
+              item.menuId === menu.id
+          )
+            ? false
+            : true;
+          return (
             <ItemCard
               key={menu.id}
               icon={<MenuBookIcon />}
@@ -62,7 +77,7 @@ const Menus = () => {
               href={`/backofficeapp/menu/${menu.id}`}
             />
           );
-        })}
+        })} */}
       </Box>
     </BackofficeLayout>
   );

@@ -60,7 +60,8 @@ const NewMenuDialog = ({ open, setOpen, newMenu, setNewMenu }: Props) => {
           file: menuImage,
           onSuccess: (assetUrl) => {
             newMenu.assetUrl = assetUrl;
-            createMenu({ ...newMenu });
+
+            dispatch(createMenu({ ...newMenu }));
           },
         })
       );

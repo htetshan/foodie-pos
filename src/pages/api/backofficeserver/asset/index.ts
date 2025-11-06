@@ -6,6 +6,10 @@ export const config = {
     bodyParser: false,
   },
 };
+interface S3File extends Express.Multer.File {
+  location: string;
+}
+
 export default async function handler(req: Request, res: Response) {
   const method = req.method;
   if (method === "POST") {
@@ -18,8 +22,10 @@ export default async function handler(req: Request, res: Response) {
         console.error("No file uploaded");
         return res.status(400).send("No file uploaded");
       }
-      const file = req.file as Express.MulterS3.File;
+      const file = req.file as S3File;
       const assetUrl = file.location;
+      console.log("assetUrl", assetUrl);
+
       return res.status(200).json({ assetUrl });
     });
   } else {
