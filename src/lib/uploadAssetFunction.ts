@@ -18,10 +18,12 @@ const s3Client = new S3Client({
 export const assetUploadFunction = multer({
   storage: multerS3({
     s3: s3Client,
-    bucket: config.minioBucket,
+    bucket: "miniohtet",
     acl: "public-read",
-    key: (_req, file, cb) => {
-      cb(null, `foodie/${Date.now()}_${file.originalname}`);
+    key: (req, file, cb) => {
+      const timestamp = Date.now();
+      const safeName = file.originalname.replace(/\s+/g, "_");
+      cb(null, `foodie/${timestamp}_${safeName}`);
     },
   }),
-}).single("file"); // Expect "file" in FormData
+}).single("file");

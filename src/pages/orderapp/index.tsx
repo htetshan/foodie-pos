@@ -19,12 +19,15 @@ export default function Home() {
         ChatGpt MinIO object storage overview:
         https://chatgpt.com/share/6909a66d-a804-8002-83c0-9ff1deca8db7
       </h4>
+      <h4>
+        ChatGpt MinIo
+        Public:https://chatgpt.com/share/690c2a07-c458-8002-a41f-509ac90be38c
+      </h4>
       <h2>Upload Image to MinIO</h2>
       <FileDropZone onDrop={(files) => handleUpload(files[0])} />
       {imageUrl && (
         <div style={{ marginTop: 20 }}>
           <h3>Uploaded Image:</h3>
-          <img src={imageUrl} alt="Uploaded" style={{ width: 200 }} />
         </div>
       )}
     </div>
