@@ -1,4 +1,3 @@
-import BackofficeLayout from "@/components/BackofficeLayout";
 import ItemCard from "@/components/ItemCard";
 import NewMenuCategoryDialog from "@/components/NewMenuCategoryDialog";
 import { MenuCategoryType } from "@/types/menuCategory";
@@ -27,7 +26,7 @@ const MenuCategory = () => {
     }
   }, [company]);
   return (
-    <BackofficeLayout>
+    <Box>
       <Box
         sx={{
           display: "flex",
@@ -71,7 +70,7 @@ const MenuCategory = () => {
           );
         })}
       </Box>
-    </BackofficeLayout>
+    </Box>
   );
 };
 

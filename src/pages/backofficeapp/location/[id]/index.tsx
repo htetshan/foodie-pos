@@ -1,4 +1,3 @@
-import BackofficeLayout from "@/components/BackofficeLayout";
 import DeleteDialog from "@/components/DeleteDialog";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSelectedLocation } from "@/store/slices/appSlice";
@@ -49,12 +48,12 @@ const LocationDetail = () => {
 
   if (!location)
     return (
-      <BackofficeLayout>
+      <Box>
         <Typography>Location not found</Typography>
-      </BackofficeLayout>
+      </Box>
     );
   return (
-    <BackofficeLayout>
+    <Box>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
           variant="contained"
@@ -110,7 +109,7 @@ const LocationDetail = () => {
         content="Are you sure you want to delete this location?"
         handleDelete={handleDeleteLocation}
       />
-    </BackofficeLayout>
+    </Box>
   );
 };
 

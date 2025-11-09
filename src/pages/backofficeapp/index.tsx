@@ -1,7 +1,7 @@
-import BackofficeLayout from "@/components/BackofficeLayout";
+import { Box } from "@mui/material";
 import { useSession } from "next-auth/react";
 
-const backofficeApp = () => {
+const backofficeAppPage = () => {
   const { data } = useSession();
 
   //why use useEffect()
@@ -15,11 +15,11 @@ const backofficeApp = () => {
   //7 Note: server come back code is not same because of different references
 
   return (
-    <BackofficeLayout>
+    <Box>
       <h5>{data?.user?.name}</h5>
-      <div>backofficeApp site</div>
-    </BackofficeLayout>
+      <div>backofficeAppPage site</div>
+    </Box>
   );
 };
 
-export default backofficeApp;
+export default backofficeAppPage;

@@ -1,4 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { qrCodeUploadFunction } from "@/lib/assetUploadFunction";
 import { prisma } from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -13,8 +14,13 @@ export default async function handler(
     const { name, locationId } = req.body;
     const isValid = name && locationId.length;
     if (isValid) return res.status(400).send("Table Cannot Create");
-    const table = await prisma.table.create({
+    let table = await prisma.table.create({
       data: { name, locationId },
+    });
+    const assetQRUrl = await qrCodeUploadFunction(table.id);
+    table = await prisma.table.update({
+      data: { assetQRUrl: assetQRUrl },
+      where: { id: table.id },
     });
 
     res.status(200).json({ table });

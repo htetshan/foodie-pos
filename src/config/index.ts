@@ -5,6 +5,7 @@ interface ConfigType {
   minioEndpoint: string;
   minioAcceptKeyId: string;
   minioSecretAcceptKey: string;
+  orderAppUrl: string;
 }
 export const config: ConfigType = {
   googleId: process.env.GOOGLE_CLIENT_ID || "",
@@ -13,4 +14,5 @@ export const config: ConfigType = {
   minioEndpoint: process.env.MINIO_ENDPOINT || "",
   minioAcceptKeyId: process.env.MINIO_ACCESS_KEY || "",
   minioSecretAcceptKey: process.env.MINIO_SECRET_KEY || "",
+  orderAppUrl: "http://localhost:3000/orderapp",
 };

@@ -1,4 +1,3 @@
-import BackofficeLayout from "@/components/BackofficeLayout";
 import DeleteDialog from "@/components/DeleteDialog";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { deleteMenu, updateMenu } from "@/store/slices/menuSlice";
@@ -101,12 +100,12 @@ const MenuDetail = () => {
 
   if (!updateData)
     return (
-      <BackofficeLayout>
+      <Box>
         <Typography>Menu not found</Typography>
-      </BackofficeLayout>
+      </Box>
     );
   return (
-    <BackofficeLayout>
+    <Box>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
           variant="contained"
@@ -204,7 +203,7 @@ const MenuDetail = () => {
         content="Are you sure you want to delete this menu?"
         handleDelete={handleDeleteMenu}
       />
-    </BackofficeLayout>
+    </Box>
   );
 };
 

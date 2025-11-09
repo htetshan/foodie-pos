@@ -1,4 +1,3 @@
-import BackofficeLayout from "@/components/BackofficeLayout";
 import DeleteDialog from "@/components/DeleteDialog";
 import MultiSelect from "@/components/MultiSelect";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -68,13 +67,13 @@ const AddonCategoryDetail = () => {
 
   if (!addonCategory)
     return (
-      <BackofficeLayout>
+      <Box>
         <Typography>Addon Category not found</Typography>
-      </BackofficeLayout>
+      </Box>
     );
 
   return (
-    <BackofficeLayout>
+    <Box>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
           variant="contained"
@@ -124,7 +123,7 @@ const AddonCategoryDetail = () => {
         content="Are you sure you want to delete this addon category?"
         handleDelete={handleDeleteAddonCategory}
       />
-    </BackofficeLayout>
+    </Box>
   );
 };
 

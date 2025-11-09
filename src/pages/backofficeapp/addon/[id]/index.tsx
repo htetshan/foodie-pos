@@ -1,4 +1,3 @@
-import BackofficeLayout from "@/components/BackofficeLayout";
 import DeleteDialog from "@/components/DeleteDialog";
 import SingleSelect from "@/components/SingleSelect";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -50,12 +49,12 @@ const AddonDetail = () => {
 
   if (!addon)
     return (
-      <BackofficeLayout>
+      <Box>
         <Typography>Addon not found</Typography>
-      </BackofficeLayout>
+      </Box>
     );
   return (
-    <BackofficeLayout>
+    <Box>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
           variant="contained"
@@ -113,7 +112,7 @@ const AddonDetail = () => {
         content="Are you sure you want to delete this addon?"
         handleDelete={handleDeleteAddon}
       />
-    </BackofficeLayout>
+    </Box>
   );
 };
 

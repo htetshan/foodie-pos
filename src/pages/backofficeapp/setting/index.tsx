@@ -1,4 +1,3 @@
-import BackofficeLayout from "@/components/BackofficeLayout";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Box, Button, TextField, Typography } from "@mui/material";
 
@@ -22,7 +21,7 @@ const Setting = () => {
   };
 
   return (
-    <BackofficeLayout>
+    <Box>
       <Box
         sx={{
           display: "flex",
@@ -51,7 +50,7 @@ const Setting = () => {
           Update
         </Button>
       </Box>
-    </BackofficeLayout>
+    </Box>
   );
 };
 

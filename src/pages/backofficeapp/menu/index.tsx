@@ -1,4 +1,3 @@
-import BackofficeLayout from "@/components/BackofficeLayout";
 import MenuCard from "@/components/MenuCard";
 import NewMenuDialog from "@/components/NewMenuDialog";
 import { useAppSelector } from "@/store/hooks";
@@ -18,14 +17,18 @@ const Menus = () => {
   const { disableLocationMenus } = useAppSelector(
     (state) => state.disableLocationMenu
   );
+
   if (!menus) return null;
   return (
-    <BackofficeLayout>
+    <Box>
       <Box
         sx={{
           display: "flex",
           justifyContent: "flex-end",
           padding: 2,
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
         }}
       >
         <Button
@@ -36,13 +39,13 @@ const Menus = () => {
         >
           New Menu
         </Button>
-        <NewMenuDialog
-          open={open}
-          setOpen={setOpen}
-          newMenu={newMenu}
-          setNewMenu={setNewMenu}
-        />
       </Box>
+      <NewMenuDialog
+        open={open}
+        setOpen={setOpen}
+        newMenu={newMenu}
+        setNewMenu={setNewMenu}
+      />
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         {menus.map((menu) => {
           const isAvailable = disableLocationMenus.find(
@@ -60,26 +63,8 @@ const Menus = () => {
             />
           );
         })}
-        {/*  {menus.map((menu) => {
-          const isAvailable = disableLocationMenus.find(
-            (item) =>
-              item.locationId === selectedLocation?.id &&
-              item.menuId === menu.id
-          )
-            ? false
-            : true;
-          return (
-            <ItemCard
-              key={menu.id}
-              icon={<MenuBookIcon />}
-              title={menu.name}
-              isAvailable={isAvailable}
-              href={`/backofficeapp/menu/${menu.id}`}
-            />
-          );
-        })} */}
       </Box>
-    </BackofficeLayout>
+    </Box>
   );
 };
 

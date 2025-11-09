@@ -23,12 +23,13 @@ export default function ActionAreaCard({
         sx={{
           width: 170,
           height: 170,
-          p: 2,
+
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          m: 2,
+          marginX: 1,
+
           cursor: "pointer",
           opacity: isAvailable ? 1 : 0.4,
         }}

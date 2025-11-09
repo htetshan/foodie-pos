@@ -26,7 +26,9 @@ const BackofficeLayout = ({ children }: Props) => {
         <Box sx={{ width: "20%", p: 1, bgcolor: "#CBD2A4" }}>
           <SideBarApp />
         </Box>
-        <Box sx={{ width: "80%", p: 1, bgcolor: "#E4E0E1" }}>{children}</Box>
+        <Box sx={{ width: "80%", p: 1, bgcolor: "#E4E0E1", overflow: "auto" }}>
+          {children}
+        </Box>
       </Box>
     </Box>
   );

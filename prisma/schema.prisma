@@ -63,6 +63,7 @@ model Table {
   name       String
   assetUrl   String?
   isArchived Boolean  @default(false)
+  assetQRUrl String?
   locationId Int
   location   Location @relation(fields: [locationId], references: [id])
 }

@@ -1,4 +1,3 @@
-import BackofficeLayout from "@/components/BackofficeLayout";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Button } from "@mui/material";
@@ -18,7 +17,7 @@ const AddonCategory = () => {
     });
 
   return (
-    <BackofficeLayout>
+    <Box>
       <Box
         sx={{
           display: "flex",
@@ -54,7 +53,7 @@ const AddonCategory = () => {
           );
         })}
       </Box>
-    </BackofficeLayout>
+    </Box>
   );
 };
 

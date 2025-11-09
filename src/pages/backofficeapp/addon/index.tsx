@@ -1,4 +1,3 @@
-import BackofficeLayout from "@/components/BackofficeLayout";
 import ItemCard from "@/components/ItemCard";
 import { useAppSelector } from "@/store/hooks";
 import { Box, Button } from "@mui/material";
@@ -16,7 +15,7 @@ const Locations = () => {
   });
 
   return (
-    <BackofficeLayout>
+    <Box>
       <Box
         sx={{
           display: "flex",
@@ -52,7 +51,7 @@ const Locations = () => {
           );
         })}
       </Box>
-    </BackofficeLayout>
+    </Box>
   );
 };
 
