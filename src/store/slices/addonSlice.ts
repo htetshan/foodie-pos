@@ -69,6 +69,8 @@ export const addonSlice = createSlice({
       state.isLoading = true;
     },
     removeAddon: (state, action: PayloadAction<number>) => {
+      /*   state.items=> 1,2,4 and action.pay.id=4  1===4(true)filter take , 4===4(false)filter no take [in cartSlice difference ways have]*/
+
       state.addons = state.addons.filter((item) =>
         item.id === action.payload ? false : true
       );

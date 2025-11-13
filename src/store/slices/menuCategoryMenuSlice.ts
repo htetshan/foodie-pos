@@ -21,6 +21,15 @@ export const menuCategoryMenuSlice = createSlice({
     setMenuCategoryMenu: (state, action: PayloadAction<MenuCategoryMenu[]>) => {
       state.menuCategoryMenus = action.payload;
     },
+    /*     Replace cannot use because api returning difference menuCategoryMenu
+     */ replaceMenuCategoryMenu: (
+      state,
+      action: PayloadAction<MenuCategoryMenu>
+    ) => {
+      state.menuCategoryMenus = state.menuCategoryMenus.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
+    },
   },
 });
 

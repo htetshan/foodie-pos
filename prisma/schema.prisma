@@ -66,6 +66,7 @@ model Table {
   assetQRUrl String?
   locationId Int
   location   Location @relation(fields: [locationId], references: [id])
+  Order      Order[]
 }
 
 model MenuCategory {
@@ -87,6 +88,7 @@ model Menu {
   menuCategoryMenu    MenuCategoryMenu[]
   menuAddonCategory   MenuAddonCategory[]
   disableLocationMenu DisableLocationMenu[]
+  Order               Order[]
 }
 
 model MenuCategoryMenu {
@@ -117,8 +119,32 @@ model MenuAddonCategory {
 model Addon {
   id              Int           @id @default(autoincrement())
   name            String
-  price           Int        @default(0)
+  price           Int           @default(0)
   isArchived      Boolean       @default(false)
   addonCategoryId Int
   addonCategory   AddonCategory @relation(fields: [addonCategoryId], references: [id])
+  Order           Order[]
+}
+
+model Order {
+  id         Int         @id @default(autoincrement())
+  menuId     Int
+  addonId    Int?
+  tableId    Int
+  quantity   Int
+  orderSeq   String
+  totalPrice Int
+  status     ORDERSTATUS
+
+  isArchived Boolean @default(false)
+
+  menu  Menu   @relation(fields: [menuId], references: [id])
+  addon Addon? @relation(fields: [addonId], references: [id])
+  table Table  @relation(fields: [tableId], references: [id])
+}
+
+enum ORDERSTATUS {
+  PENDING
+  COOKING
+  COMPLETE
 }

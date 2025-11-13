@@ -25,6 +25,7 @@ export default async function handler(
   } else if (method === "PUT") {
     const { id, isAvailable, selectedLocationId, menuCategoryIds, ...payload } =
       req.body;
+
     const exist = await prisma.menu.findFirst({ where: { id: id } });
     if (!exist) return res.status(400).send("Menu Cannot Find");
     const menu = await prisma.menu.update({ data: payload, where: { id } });
@@ -106,6 +107,8 @@ export default async function handler(
     const menuCategoryMenus = await prisma.menuCategoryMenu.findMany({
       where: { menuId: id },
     });
+    console.log(menuCategoryMenus);
+
     res.status(200).json({ menu, menuCategoryMenus, disableLocationMenus });
   } else if (method === "DELETE") {
     const menuId = Number(req.query.id);

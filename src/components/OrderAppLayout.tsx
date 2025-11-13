@@ -1,3 +1,5 @@
+import { useAppDispatch } from "@/store/hooks";
+import { appFetchServer } from "@/store/slices/appSlice";
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { ReactNode, useEffect } from "react";
@@ -6,10 +8,11 @@ interface Props {
 }
 const OrderAppLayout = ({ children }: Props) => {
   const router = useRouter();
+  const dispath = useAppDispatch();
   const { tableId } = router.query;
   useEffect(() => {
     if (tableId) {
-      // get menu categories
+      dispath(appFetchServer({ tableId: String(tableId) }));
     }
   }, [tableId]);
   return (

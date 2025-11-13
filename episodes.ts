@@ -82,4 +82,15 @@ Episode 37
     3. Next: Order app
     Note: Responsive is not well now 
 ####################################################
+Episode 38
+    1. Layout refactor
+    2. Table QR code asset create and upload
+    3. Next: Order app
+####################################################
+Episode 39
+    1. Fetch Order App data in OrderAppLayout
+    2. Setting up slices for Order App, including cart and orders 
+    3. Show location menu category, menus, addon category, addons
+    4. Next: MUI tabs, menu card, routing
+####################################################
 */

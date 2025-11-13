@@ -9,13 +9,18 @@ import { CreateTableParam } from "@/types/table";
 import NewTableDialog from "@/components/NewTableDialog";
 const Tables = () => {
   const { tables } = useAppSelector((state) => state.table);
+
   const { selectedLocation } = useAppSelector((state) => state.app);
 
   const [open, setOpen] = useState<boolean>(false);
+
   const [newTable, setNewTable] = useState<CreateTableParam>({
     name: "",
     locationId: selectedLocation?.id,
   });
+  const table = tables.filter(
+    (item) => item.locationId === selectedLocation?.id
+  );
   useEffect(() => {
     if (selectedLocation) {
       setNewTable({ ...newTable, locationId: selectedLocation.id });
@@ -107,7 +112,7 @@ const Tables = () => {
         setNewTable={setNewTable}
       />
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-        {tables.map((item) => {
+        {table.map((item) => {
           return (
             <Box
               key={item.id}

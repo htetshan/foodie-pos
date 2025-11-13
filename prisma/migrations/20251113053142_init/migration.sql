@@ -50,7 +50,9 @@ CREATE TABLE "DisableLocationMenu" (
 CREATE TABLE "Table" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "assetUrl" TEXT,
     "isArchived" BOOLEAN NOT NULL DEFAULT false,
+    "assetQRUrl" TEXT,
     "locationId" INTEGER NOT NULL,
 
     CONSTRAINT "Table_pkey" PRIMARY KEY ("id")
@@ -72,6 +74,7 @@ CREATE TABLE "Menu" (
     "name" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
     "isArchived" BOOLEAN NOT NULL DEFAULT false,
+    "assetUrl" TEXT,
 
     CONSTRAINT "Menu_pkey" PRIMARY KEY ("id")
 );
@@ -90,6 +93,7 @@ CREATE TABLE "AddonCategory" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "isArchived" BOOLEAN NOT NULL DEFAULT false,
+    "isRequired" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "AddonCategory_pkey" PRIMARY KEY ("id")
 );
@@ -107,6 +111,7 @@ CREATE TABLE "MenuAddonCategory" (
 CREATE TABLE "Addon" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "price" INTEGER NOT NULL DEFAULT 0,
     "isArchived" BOOLEAN NOT NULL DEFAULT false,
     "addonCategoryId" INTEGER NOT NULL,
 

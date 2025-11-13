@@ -13,6 +13,7 @@ import { setMenuAddonCategory } from "./menuAddonCategorySlice";
 import { setAddons } from "./addonSlice";
 import { setTables } from "./tablesSlice";
 import { UploadAssetPayload } from "@/types/menu";
+import { BaseOptionFunType } from "@/types/baseOption";
 
 // Initial state
 interface AppSliceType {
@@ -20,6 +21,9 @@ interface AppSliceType {
   selectedLocation: Location | null;
   isLoading: boolean;
   error: Error | null;
+}
+interface GetAppDataOption extends BaseOptionFunType {
+  tableId?: string;
 }
 const initialState: AppSliceType = {
   init: false,
@@ -30,8 +34,12 @@ const initialState: AppSliceType = {
 
 export const appFetchServer = createAsyncThunk(
   "appSlice/appFetchServer",
-  async (_, thunkApi) => {
-    const response = await fetch(`${config.backOfficeAppApiBaseUrl}/app`);
+  async (option: GetAppDataOption, thunkApi) => {
+    const { tableId } = option;
+    const apiUrl = tableId
+      ? `${config.orderAppApiBaseUrl}/app?tableId=${tableId}`
+      : `${config.backOfficeAppApiBaseUrl}/app`;
+    const response = await fetch(apiUrl);
     const dataFromServer = await response.json();
     const {
       company,
@@ -52,6 +60,7 @@ export const appFetchServer = createAsyncThunk(
     thunkApi.dispatch(setLocations(locations));
     thunkApi.dispatch(setCompany(company));
     thunkApi.dispatch(setAddonCategories(addonCategories));
+
     thunkApi.dispatch(setAddons(addons));
     thunkApi.dispatch(setTables(tables));
     thunkApi.dispatch(setMenuAddonCategory(menuAddonCategories));

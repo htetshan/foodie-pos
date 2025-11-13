@@ -72,7 +72,7 @@ const NewAddonDialog = ({ open, setOpen, newAddon, setNewAddon }: Props) => {
             />
             <Box sx={{ p: 1 }}>
               <SingleSelect
-                title="Menu"
+                title="addonCategory"
                 selected={selected}
                 setSelected={setSelected}
                 itemCatalog={addonCategories}

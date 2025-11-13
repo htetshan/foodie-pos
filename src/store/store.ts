@@ -12,6 +12,8 @@ import addonCategoryReducer from "./slices/addonCategorySlice";
 import addonReducer from "./slices/addonSlice";
 import tableReducer from "./slices/tablesSlice";
 import menuAddonCategoryReducer from "./slices/menuAddonCategorySlice";
+import cartReducer from "./slices/cartSlice";
+import orderReducer from "./slices/orderSlice";
 // ...
 
 export const store = configureStore({
@@ -32,6 +34,9 @@ export const store = configureStore({
 
     disableLocationMenuCategory: disableLocationMenuCategoryReducer,
     disableLocationMenu: disableLocationMenuReducer,
+
+    cart: cartReducer,
+    order: orderReducer,
   },
 });
 
